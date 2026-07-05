@@ -20,6 +20,8 @@ final class BoardView: UIView {
     var lastMove: Set<Int> = [] { didSet { setNeedsDisplay() } }
     /// Origin squares the player may pick up (have a legal move).
     var movable: Set<Int> = [] { didSet { setNeedsDisplay() } }
+    /// Rotate the board 180° so Black sits at the bottom (nearby-match guest).
+    var flipped = false { didSet { setNeedsDisplay() } }
 
     var onCellTap: ((Int) -> Void)?
 
@@ -58,10 +60,15 @@ final class BoardView: UIView {
         let cell = inner.width / CGFloat(Engine.size)
         let c = min(Engine.size - 1, max(0, Int((point.x - inner.minX) / cell)))
         let r = min(Engine.size - 1, max(0, Int((point.y - inner.minY) / cell)))
-        let index = r * Engine.size + c
+        let index = modelIndex(forDisplayIndex: r * Engine.size + c)
         if Engine.isPlayable(index) {
             onCellTap?(index)
         }
+    }
+
+    /// 180° rotation maps display cell i to board cell 99 - i (and vice versa).
+    private func modelIndex(forDisplayIndex i: Int) -> Int {
+        flipped ? Engine.size * Engine.size - 1 - i : i
     }
 
     // MARK: - Drawing
@@ -77,9 +84,10 @@ final class BoardView: UIView {
         let inner = innerRect
         let cell = inner.width / CGFloat(Engine.size)
 
-        for i in 0..<(Engine.size * Engine.size) {
-            let r = Engine.rowOf(i)
-            let c = Engine.colOf(i)
+        for d in 0..<(Engine.size * Engine.size) {
+            let r = Engine.rowOf(d)
+            let c = Engine.colOf(d)
+            let i = modelIndex(forDisplayIndex: d)
             let cellRect = CGRect(
                 x: inner.minX + CGFloat(c) * cell,
                 y: inner.minY + CGFloat(r) * cell,
@@ -95,7 +103,11 @@ final class BoardView: UIView {
                 ctx.fill(cellRect)
             }
 
-            drawCoordinates(row: r, col: c, in: cellRect, dark: Engine.isPlayable(i))
+            drawCoordinates(
+                displayRow: r, displayCol: c,
+                modelRow: Engine.rowOf(i), modelCol: Engine.colOf(i),
+                in: cellRect, dark: Engine.isPlayable(i)
+            )
 
             if let piece = board[i] {
                 drawPiece(ctx, piece: piece, in: cellRect)
@@ -113,19 +125,24 @@ final class BoardView: UIView {
         }
     }
 
-    private func drawCoordinates(row: Int, col: Int, in cellRect: CGRect, dark: Bool) {
+    private func drawCoordinates(
+        displayRow: Int, displayCol: Int, modelRow: Int, modelCol: Int,
+        in cellRect: CGRect, dark: Bool
+    ) {
         let color = dark
             ? UIColor.white.withAlphaComponent(0.5)
             : UIColor.black.withAlphaComponent(0.4)
         let font = UIFont.systemFont(ofSize: max(8, cellRect.width * 0.2), weight: .semibold)
         let attributes: [NSAttributedString.Key: Any] = [.font: font, .foregroundColor: color]
 
-        if col == 0 {
-            let text = "\(Engine.size - row)" as NSString
+        // Labels stay on the left/bottom edges of the screen but always name
+        // the square's true rank/file, so they follow the flip.
+        if displayCol == 0 {
+            let text = "\(Engine.size - modelRow)" as NSString
             text.draw(at: CGPoint(x: cellRect.minX + 3, y: cellRect.minY + 2), withAttributes: attributes)
         }
-        if row == Engine.size - 1 {
-            let text = String(UnicodeScalar(UInt8(65 + col))) as NSString
+        if displayRow == Engine.size - 1 {
+            let text = String(UnicodeScalar(UInt8(65 + modelCol))) as NSString
             let size = text.size(withAttributes: attributes)
             text.draw(
                 at: CGPoint(x: cellRect.maxX - size.width - 3, y: cellRect.maxY - size.height - 2),

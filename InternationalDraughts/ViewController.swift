@@ -6,10 +6,22 @@
 //  Layout adapts to orientation: portrait stacks the panel below the board,
 //  landscape places it to the right.
 //
+//  Two game modes:
+//  - .ai   人机对战：player is White, minimax AI is Black.
+//  - .peer 附近对战：MultipeerConnectivity match; the room host plays White,
+//    the joiner plays Black and sees the board rotated 180°.
+//
 
+import AudioToolbox
+import MultipeerConnectivity
 import UIKit
 
 class ViewController: UIViewController {
+
+    private enum GameMode {
+        case ai
+        case peer
+    }
 
     // MARK: - Game state
 
@@ -17,6 +29,10 @@ class ViewController: UIViewController {
     private var turn: PieceColor = .white
     private var status: GameStatus = .playing
     private var difficulty: Difficulty = .medium
+
+    private var mode: GameMode = .ai
+    /// The color this device plays. Always .white in AI mode.
+    private var localColor: PieceColor = .white
 
     // Current selection / in-progress capture sequence (path of squares).
     private var selected: Int?
@@ -27,11 +43,11 @@ class ViewController: UIViewController {
     private var aiGeneration = 0
 
     // It is the AI's turn to think whenever Black is to move during play.
-    private var thinking: Bool { turn == .black && status == .playing }
+    private var thinking: Bool { mode == .ai && turn == .black && status == .playing }
 
-    // Player is always White; AI is Black.
     private var playerMoves: [Move] {
-        turn == .white && status == .playing ? Engine.legalMoves(board: board, color: .white) : []
+        turn == localColor && status == .playing
+            ? Engine.legalMoves(board: board, color: localColor) : []
     }
 
     private var movable: Set<Int> { Set(playerMoves.map { $0.from }) }
@@ -55,6 +71,13 @@ class ViewController: UIViewController {
         return s
     }
 
+    // MARK: - Multipeer
+
+    private let multipeer = MultipeerService()
+    /// Color this device will take when the pending connection completes.
+    private var pendingRole: PieceColor = .white
+    private var isHostingRoom = false
+
     // MARK: - Views
 
     private let titleLabel = UILabel()
@@ -63,9 +86,15 @@ class ViewController: UIViewController {
     private let panelScroll = UIScrollView()
     private let panelStack = UIStackView()
     private let statusLabel = PaddedLabel()
+    private let whiteNameLabel = UILabel()
+    private let blackNameLabel = UILabel()
     private let whiteCountLabel = UILabel()
     private let blackCountLabel = UILabel()
     private let difficultyControl = UISegmentedControl(items: Difficulty.allCases.map { $0.label })
+    private var difficultySection = UIView()
+    private let peerStatusLabel = UILabel()
+    private let hostButton = UIButton(configuration: .bordered())
+    private let joinButton = UIButton(configuration: .bordered())
 
     private var portraitConstraints: [NSLayoutConstraint] = []
     private var landscapeConstraints: [NSLayoutConstraint] = []
@@ -79,7 +108,18 @@ class ViewController: UIViewController {
         buildViews()
         buildConstraints()
         boardView.onCellTap = { [weak self] index in self?.handleCellTap(index) }
+        configureMultipeer()
         updateUI()
+        updatePeerUI()
+
+        // Test hooks for driving a nearby match from UI tests.
+        if CommandLine.arguments.contains("-mpAutoHost") {
+            multipeer.autoAcceptInvitations = true
+            hostTapped()
+        } else if CommandLine.arguments.contains("-mpAutoJoin") {
+            pendingRole = .black
+            multipeer.startAutoJoin()
+        }
     }
 
     override func viewWillLayoutSubviews() {
@@ -127,12 +167,15 @@ class ViewController: UIViewController {
         newGameButton.addTarget(self, action: #selector(newGameTapped), for: .touchUpInside)
         newGameButton.accessibilityIdentifier = "newGame"
 
+        difficultySection = labeledControl(title: "难度", control: difficultyControl)
+
         panelStack.axis = .vertical
         panelStack.spacing = 14
         panelStack.addArrangedSubview(statusLabel)
-        panelStack.addArrangedSubview(scoreRow(color: .white, label: "你（白）", countLabel: whiteCountLabel))
-        panelStack.addArrangedSubview(scoreRow(color: .black, label: "电脑（黑）", countLabel: blackCountLabel))
-        panelStack.addArrangedSubview(labeledControl(title: "难度", control: difficultyControl))
+        panelStack.addArrangedSubview(scoreRow(color: .white, nameLabel: whiteNameLabel, countLabel: whiteCountLabel))
+        panelStack.addArrangedSubview(scoreRow(color: .black, nameLabel: blackNameLabel, countLabel: blackCountLabel))
+        panelStack.addArrangedSubview(difficultySection)
+        panelStack.addArrangedSubview(peerCard())
         panelStack.addArrangedSubview(newGameButton)
         panelStack.addArrangedSubview(rulesCard())
 
@@ -145,15 +188,13 @@ class ViewController: UIViewController {
         }
     }
 
-    private func scoreRow(color: PieceColor, label: String, countLabel: UILabel) -> UIView {
+    private func scoreRow(color: PieceColor, nameLabel: UILabel, countLabel: UILabel) -> UIView {
         let row = UIView()
         row.layer.cornerRadius = 10
         row.layer.borderWidth = 1
         row.layer.borderColor = UIColor.appBorder.cgColor
 
         let chip = ChipView(color: color)
-        let nameLabel = UILabel()
-        nameLabel.text = label
         nameLabel.font = .systemFont(ofSize: 15)
         nameLabel.textColor = .appText
 
@@ -187,6 +228,31 @@ class ViewController: UIViewController {
         stack.axis = .vertical
         stack.spacing = 8
         return stack
+    }
+
+    private func peerCard() -> UIView {
+        peerStatusLabel.text = "未连接"
+        peerStatusLabel.font = .systemFont(ofSize: 13)
+        peerStatusLabel.textColor = .appText
+        peerStatusLabel.numberOfLines = 0
+        peerStatusLabel.accessibilityIdentifier = "peerStatus"
+
+        hostButton.configuration?.title = "创建房间"
+        hostButton.addTarget(self, action: #selector(hostTapped), for: .touchUpInside)
+        hostButton.accessibilityIdentifier = "hostRoom"
+        joinButton.configuration?.title = "搜索房间"
+        joinButton.addTarget(self, action: #selector(joinTapped), for: .touchUpInside)
+        joinButton.accessibilityIdentifier = "joinRoom"
+
+        let buttons = UIStackView(arrangedSubviews: [hostButton, joinButton])
+        buttons.axis = .horizontal
+        buttons.distribution = .fillEqually
+        buttons.spacing = 6
+
+        let stack = UIStackView(arrangedSubviews: [peerStatusLabel, buttons])
+        stack.axis = .vertical
+        stack.spacing = 8
+        return labeledControl(title: "附近对战（无需网络）", control: stack)
     }
 
     private func rulesCard() -> UIView {
@@ -296,7 +362,8 @@ class ViewController: UIViewController {
     // MARK: - Interaction
 
     private func handleCellTap(_ i: Int) {
-        guard turn == .white, status == .playing else { return }
+        guard turn == localColor, status == .playing else { return }
+        if mode == .peer && !multipeer.isConnected { return }
 
         // Nothing selected yet: pick up a movable piece.
         guard selected != nil else {
@@ -350,7 +417,23 @@ class ViewController: UIViewController {
         }
         turn = nextTurn
         updateUI()
-        scheduleAIMoveIfNeeded()
+
+        switch mode {
+        case .ai:
+            scheduleAIMoveIfNeeded()
+        case .peer:
+            if mover == localColor {
+                multipeer.send(.move(move))
+            } else if status == .playing {
+                // Opponent's move arrived and it is our turn now.
+                playYourTurnSound()
+            }
+        }
+    }
+
+    /// Short cue for the nearby match; muted by the ring/silent switch.
+    private func playYourTurnSound() {
+        AudioServicesPlaySystemSound(1057) // "Tink"
     }
 
     /// Drive the AI when it is Black's turn. The search runs off the main thread;
@@ -364,7 +447,7 @@ class ViewController: UIViewController {
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.35) { [weak self] in
             let move = Engine.chooseAIMove(board: snapshot, difficulty: level)
             DispatchQueue.main.async {
-                guard let self, generation == self.aiGeneration,
+                guard let self, generation == self.aiGeneration, self.mode == .ai,
                       self.turn == .black, self.status == .playing else { return }
                 if let move { self.commit(move) }
             }
@@ -376,6 +459,13 @@ class ViewController: UIViewController {
     }
 
     @objc private func newGameTapped() {
+        if mode == .peer && multipeer.isConnected {
+            multipeer.send(NetMessage(kind: .restart))
+        }
+        resetBoard()
+    }
+
+    private func resetBoard() {
         aiGeneration += 1 // discard any in-flight AI search
         board = Engine.initialBoard()
         turn = .white
@@ -386,6 +476,111 @@ class ViewController: UIViewController {
         updateUI()
     }
 
+    // MARK: - Multipeer flow
+
+    private func configureMultipeer() {
+        multipeer.onInvitation = { [weak self] peerName, respond in
+            guard let self else { return respond(false) }
+            let alert = UIAlertController(
+                title: "对战邀请",
+                message: "「\(peerName)」想加入你的对局",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "拒绝", style: .cancel) { _ in respond(false) })
+            alert.addAction(UIAlertAction(title: "接受", style: .default) { _ in respond(true) })
+            self.present(alert, animated: true)
+        }
+
+        multipeer.onPeerConnected = { [weak self] peerName in
+            self?.peerDidConnect(peerName)
+        }
+
+        multipeer.onPeerDisconnected = { [weak self] _ in
+            guard let self, self.mode == .peer else { return }
+            self.leavePeerMode(message: "与对方的连接已断开，已返回人机对战模式。")
+        }
+
+        multipeer.onMessage = { [weak self] message in
+            self?.handleMessage(message)
+        }
+    }
+
+    @objc private func hostTapped() {
+        if multipeer.isConnected || isHostingRoom {
+            // Button doubles as 断开连接 / 取消.
+            if multipeer.isConnected {
+                multipeer.disconnect()
+                leavePeerMode(message: nil)
+            } else {
+                multipeer.stopDiscovery()
+                isHostingRoom = false
+                updatePeerUI()
+            }
+            return
+        }
+        isHostingRoom = true
+        pendingRole = .white
+        multipeer.startHosting()
+        updatePeerUI()
+    }
+
+    @objc private func joinTapped() {
+        pendingRole = .black
+        let browser = multipeer.makeBrowserViewController()
+        browser.delegate = self
+        present(browser, animated: true)
+    }
+
+    private func peerDidConnect(_ peerName: String) {
+        if presentedViewController is MCBrowserViewController {
+            dismiss(animated: true)
+        }
+        isHostingRoom = false
+        mode = .peer
+        localColor = pendingRole
+        boardView.flipped = localColor == .black
+        difficultySection.isHidden = true
+        subtitleLabel.text = "International Draughts · 附近对战"
+        resetBoard()
+        updatePeerUI()
+    }
+
+    private func handleMessage(_ message: NetMessage) {
+        guard mode == .peer else { return }
+        switch message.kind {
+        case .restart:
+            resetBoard()
+            // Opponent restarted; White (the host) moves first.
+            if localColor == .white {
+                playYourTurnSound()
+            }
+        case .move:
+            guard status == .playing, turn == localColor.opponent,
+                  let path = message.path else { return }
+            // Only apply a move our own engine agrees is legal right now.
+            let legal = Engine.legalMoves(board: board, color: turn)
+            guard let match = legal.first(where: { $0.path == path }) else { return }
+            commit(match)
+        }
+    }
+
+    private func leavePeerMode(message: String?) {
+        multipeer.disconnect()
+        isHostingRoom = false
+        mode = .ai
+        localColor = .white
+        boardView.flipped = false
+        difficultySection.isHidden = false
+        subtitleLabel.text = "International Draughts · 人机对战"
+        resetBoard()
+        updatePeerUI()
+        if let message {
+            let alert = UIAlertController(title: "连接已断开", message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "好", style: .default))
+            present(alert, animated: true)
+        }
+    }
+
     // MARK: - UI refresh
 
     private func updateUI() {
@@ -394,20 +589,61 @@ class ViewController: UIViewController {
         boardView.targets = targets
         boardView.lastMove = Set(lastMove)
         boardView.movable = movable
+        // Machine-readable state for UI tests (board is a single AX element).
+        boardView.accessibilityValue = "turn:\(turn == .white ? "w" : "b")"
+            + " last:" + lastMove.map(String.init).joined(separator: "-")
 
         whiteCountLabel.text = "\(Engine.countPieces(board: board, color: .white))"
         blackCountLabel.text = "\(Engine.countPieces(board: board, color: .black))"
+        switch mode {
+        case .ai:
+            whiteNameLabel.text = "你（白）"
+            blackNameLabel.text = "电脑（黑）"
+        case .peer:
+            whiteNameLabel.text = localColor == .white ? "你（白）" : "对方（白）"
+            blackNameLabel.text = localColor == .black ? "你（黑）" : "对方（黑）"
+        }
 
         statusLabel.layer.borderColor = UIColor.accentBorder.cgColor
-        switch status {
-        case .whiteWin: statusLabel.text = "🎉 你赢了！"
-        case .blackWin: statusLabel.text = "💻 电脑获胜"
-        case .draw: statusLabel.text = "平局"
-        case .playing: statusLabel.text = turn == .black ? "电脑思考中…" : "你的回合（白方）"
-        }
+        statusLabel.text = statusText()
         statusLabel.font = status == .playing
             ? .systemFont(ofSize: 16, weight: .semibold)
             : .systemFont(ofSize: 20, weight: .semibold)
+    }
+
+    private func statusText() -> String {
+        let localWon = (status == .whiteWin && localColor == .white)
+            || (status == .blackWin && localColor == .black)
+        switch status {
+        case .whiteWin, .blackWin:
+            if mode == .ai {
+                return localWon ? "🎉 你赢了！" : "💻 电脑获胜"
+            }
+            return localWon ? "🎉 你赢了！" : "对方获胜"
+        case .draw:
+            return "平局"
+        case .playing:
+            let side = localColor == .white ? "白方" : "黑方"
+            if turn == localColor {
+                return "你的回合（\(side)）"
+            }
+            return mode == .ai ? "电脑思考中…" : "等待对方走子…"
+        }
+    }
+
+    private func updatePeerUI() {
+        joinButton.isHidden = multipeer.isConnected || isHostingRoom
+        if multipeer.isConnected {
+            let side = localColor == .white ? "你执白，先行" : "你执黑，后行"
+            peerStatusLabel.text = "已连接：\(multipeer.connectedPeerName ?? "对方")（\(side)）"
+            hostButton.configuration?.title = "断开连接"
+        } else if isHostingRoom {
+            peerStatusLabel.text = "等待对手加入…（对方选择「搜索房间」即可找到你）"
+            hostButton.configuration?.title = "取消"
+        } else {
+            peerStatusLabel.text = "未连接"
+            hostButton.configuration?.title = "创建房间"
+        }
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -419,6 +655,20 @@ class ViewController: UIViewController {
                 row.layer.borderColor = UIColor.appBorder.cgColor
             }
         }
+    }
+}
+
+// MARK: - MCBrowserViewControllerDelegate (manual join flow)
+
+extension ViewController: MCBrowserViewControllerDelegate {
+
+    func browserViewControllerDidFinish(_ browserViewController: MCBrowserViewController) {
+        dismiss(animated: true)
+    }
+
+    func browserViewControllerWasCancelled(_ browserViewController: MCBrowserViewController) {
+        multipeer.stopDiscovery()
+        dismiss(animated: true)
     }
 }
 

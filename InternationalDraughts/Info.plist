@@ -4,6 +4,13 @@
 <dict>
 	<key>CFBundleDisplayName</key>
 	<string>国际跳棋</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>用于发现附近的玩家并建立连接，进行无需互联网的两人对战。</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_intl-draughts._tcp</string>
+		<string>_intl-draughts._udp</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

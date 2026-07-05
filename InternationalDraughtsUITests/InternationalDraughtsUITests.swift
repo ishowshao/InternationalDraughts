@@ -31,6 +31,77 @@ final class InternationalDraughtsUITests: XCTestCase {
         add(attachment)
     }
 
+    // MARK: - Nearby match (MultipeerConnectivity, two simulators)
+    // Run testNearbyMatchHost on one simulator and testNearbyMatchJoin on
+    // another at the same time; they connect and play one move each.
+
+    private func waitLabel(_ element: XCUIElement, _ text: String, timeout: TimeInterval,
+                           contains: Bool = false) {
+        let format = contains ? "label CONTAINS %@" : "label == %@"
+        let predicate = NSPredicate(format: format, text)
+        wait(for: [expectation(for: predicate, evaluatedWith: element)], timeout: timeout)
+    }
+
+    /// Host (White): creates the room, plays (6,3)->(5,4), waits for Black's reply.
+    func testNearbyMatchHost() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-mpAutoHost"]
+        app.launch()
+
+        let board = app.otherElements["board"]
+        XCTAssertTrue(board.waitForExistence(timeout: 5))
+        let peerStatus = app.staticTexts["peerStatus"]
+        waitLabel(peerStatus, "已连接", timeout: 120, contains: true)
+        waitLabel(peerStatus, "你执白", timeout: 10, contains: true)
+        attach(app, "host-connected")
+
+        let status = app.staticTexts["status"]
+        waitLabel(status, "你的回合（白方）", timeout: 10)
+        tapCell(board, 6, 3)
+        tapCell(board, 5, 4)
+
+        // Wait on the board's machine-readable state instead of the transient
+        // "等待对方走子…" label — Black's reply can arrive within a second.
+        let blackReplied = NSPredicate(format: "value CONTAINS %@", "last:34-45")
+        wait(for: [expectation(for: blackReplied, evaluatedWith: board)], timeout: 90)
+        waitLabel(status, "你的回合（白方）", timeout: 10)
+        XCTAssertEqual(app.staticTexts["whiteCount"].label, "20")
+        XCTAssertEqual(app.staticTexts["blackCount"].label, "20")
+        attach(app, "host-after-black-move")
+
+        // Keep the session alive briefly so the joiner finishes its asserts.
+        Thread.sleep(forTimeInterval: 5)
+    }
+
+    /// Joiner (Black, flipped board): auto-joins, answers White's move.
+    func testNearbyMatchJoin() throws {
+        let app = XCUIApplication()
+        app.launchArguments = ["-mpAutoJoin"]
+        app.launch()
+
+        let board = app.otherElements["board"]
+        XCTAssertTrue(board.waitForExistence(timeout: 5))
+        let peerStatus = app.staticTexts["peerStatus"]
+        waitLabel(peerStatus, "已连接", timeout: 120, contains: true)
+        waitLabel(peerStatus, "你执黑", timeout: 10, contains: true)
+        attach(app, "join-connected")
+
+        // Wait for White's opening move, then reply. Board is flipped for
+        // Black, so model (3,4)->(4,5) is display (6,5)->(5,4).
+        let status = app.staticTexts["status"]
+        waitLabel(status, "你的回合（黑方）", timeout: 90)
+        attach(app, "join-white-moved")
+        tapCell(board, 6, 5)
+        tapCell(board, 5, 4)
+        waitLabel(status, "等待对方走子…", timeout: 10)
+        XCTAssertEqual(app.staticTexts["whiteCount"].label, "20")
+        XCTAssertEqual(app.staticTexts["blackCount"].label, "20")
+        attach(app, "join-after-reply")
+
+        // Give the reliable send time to flush before the app dies.
+        Thread.sleep(forTimeInterval: 5)
+    }
+
     /// Landscape layout check (board left, panel right) — intended for iPad.
     func testLandscapeLayoutPlaysMove() throws {
         XCUIDevice.shared.orientation = .landscapeLeft
