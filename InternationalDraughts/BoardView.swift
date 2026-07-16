@@ -39,7 +39,7 @@ final class BoardView: UIView {
         contentMode = .redraw
         isAccessibilityElement = true
         accessibilityIdentifier = "board"
-        accessibilityLabel = "Draughts board"
+        accessibilityLabel = String(localized: "Draughts board")
     }
 
     required init?(coder: NSCoder) {

@@ -13,6 +13,22 @@ final class InternationalDraughtsUITests: XCTestCase {
         continueAfterFailure = false
     }
 
+    private func makeApp(language: String = "zh-Hans", arguments: [String] = []) -> XCUIApplication {
+        let app = XCUIApplication()
+        let locale: String
+        switch language {
+        case "zh-Hans": locale = "zh_CN"
+        case "zh-Hant": locale = "zh_TW"
+        case "fr": locale = "fr_FR"
+        default: locale = "en_US"
+        }
+        app.launchArguments = arguments + [
+            "-AppleLanguages", "(\(language))",
+            "-AppleLocale", locale,
+        ]
+        return app
+    }
+
     /// Taps the center of board cell (row, col), accounting for the 10pt frame.
     private func tapCell(_ board: XCUIElement, _ r: Int, _ c: Int) {
         let border: CGFloat = 10
@@ -44,8 +60,7 @@ final class InternationalDraughtsUITests: XCTestCase {
 
     /// Host (White): creates the room, plays (6,3)->(5,4), waits for Black's reply.
     func testNearbyMatchHost() throws {
-        let app = XCUIApplication()
-        app.launchArguments = ["-mpAutoHost"]
+        let app = makeApp(arguments: ["-mpAutoHost"])
         app.launch()
 
         let board = app.otherElements["board"]
@@ -75,8 +90,7 @@ final class InternationalDraughtsUITests: XCTestCase {
 
     /// Joiner (Black, flipped board): auto-joins, answers White's move.
     func testNearbyMatchJoin() throws {
-        let app = XCUIApplication()
-        app.launchArguments = ["-mpAutoJoin"]
+        let app = makeApp(arguments: ["-mpAutoJoin"])
         app.launch()
 
         let board = app.otherElements["board"]
@@ -105,7 +119,7 @@ final class InternationalDraughtsUITests: XCTestCase {
     /// Landscape layout check (board left, panel right) — intended for iPad.
     func testLandscapeLayoutPlaysMove() throws {
         XCUIDevice.shared.orientation = .landscapeLeft
-        let app = XCUIApplication()
+        let app = makeApp()
         app.launch()
 
         let board = app.otherElements["board"]
@@ -126,7 +140,7 @@ final class InternationalDraughtsUITests: XCTestCase {
 
     func testPlayMoveAndAIReplies() throws {
         XCUIDevice.shared.orientation = .portrait
-        let app = XCUIApplication()
+        let app = makeApp()
         app.launch()
 
         let board = app.otherElements["board"]
@@ -157,5 +171,34 @@ final class InternationalDraughtsUITests: XCTestCase {
         app.buttons["newGame"].tap()
         XCTAssertEqual(status.label, "你的回合（白方）")
         attach(app, "new-game")
+    }
+
+    func testEnglishLocalization() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = makeApp(language: "en")
+        app.launch()
+
+        XCTAssertTrue(app.staticTexts["International Draughts"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["status"].label, "Your turn (White)")
+        XCTAssertTrue(app.buttons["New Game"].exists)
+        XCTAssertTrue(app.buttons["Create Room"].exists)
+        XCTAssertTrue(app.buttons["Find Room"].exists)
+    }
+
+    func testTraditionalChineseLocalization() throws {
+        let app = makeApp(language: "zh-Hant")
+        app.launch()
+
+        XCTAssertTrue(app.staticTexts["國際跳棋"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["status"].label, "你的回合（白方）")
+        XCTAssertTrue(app.buttons["新遊戲"].exists)
+    }
+
+    func testUnsupportedLanguageFallsBackToEnglish() throws {
+        let app = makeApp(language: "fr")
+        app.launch()
+
+        XCTAssertTrue(app.staticTexts["International Draughts"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["status"].label, "Your turn (White)")
     }
 }

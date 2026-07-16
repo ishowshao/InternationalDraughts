@@ -134,12 +134,12 @@ class ViewController: UIViewController {
     // MARK: - View construction
 
     private func buildViews() {
-        titleLabel.text = "国际跳棋"
+        titleLabel.text = String(localized: "International Draughts")
         titleLabel.font = .systemFont(ofSize: 32, weight: .bold)
         titleLabel.textColor = .appHeading
         titleLabel.textAlignment = .center
 
-        subtitleLabel.text = "International Draughts · 人机对战"
+        subtitleLabel.text = String(localized: "International Draughts · Play against AI")
         subtitleLabel.font = .systemFont(ofSize: 14)
         subtitleLabel.textColor = .appText
         subtitleLabel.textAlignment = .center
@@ -158,7 +158,7 @@ class ViewController: UIViewController {
         difficultyControl.addTarget(self, action: #selector(difficultyChanged), for: .valueChanged)
 
         var newGameConfig = UIButton.Configuration.filled()
-        newGameConfig.title = "新游戏"
+        newGameConfig.title = String(localized: "New Game")
         newGameConfig.baseBackgroundColor = .accent
         newGameConfig.baseForegroundColor = .white
         newGameConfig.cornerStyle = .medium
@@ -167,7 +167,7 @@ class ViewController: UIViewController {
         newGameButton.addTarget(self, action: #selector(newGameTapped), for: .touchUpInside)
         newGameButton.accessibilityIdentifier = "newGame"
 
-        difficultySection = labeledControl(title: "难度", control: difficultyControl)
+        difficultySection = labeledControl(title: String(localized: "Difficulty"), control: difficultyControl)
 
         panelStack.axis = .vertical
         panelStack.spacing = 14
@@ -231,16 +231,16 @@ class ViewController: UIViewController {
     }
 
     private func peerCard() -> UIView {
-        peerStatusLabel.text = "未连接"
+        peerStatusLabel.text = String(localized: "Not connected")
         peerStatusLabel.font = .systemFont(ofSize: 13)
         peerStatusLabel.textColor = .appText
         peerStatusLabel.numberOfLines = 0
         peerStatusLabel.accessibilityIdentifier = "peerStatus"
 
-        hostButton.configuration?.title = "创建房间"
+        hostButton.configuration?.title = String(localized: "Create Room")
         hostButton.addTarget(self, action: #selector(hostTapped), for: .touchUpInside)
         hostButton.accessibilityIdentifier = "hostRoom"
-        joinButton.configuration?.title = "搜索房间"
+        joinButton.configuration?.title = String(localized: "Find Room")
         joinButton.addTarget(self, action: #selector(joinTapped), for: .touchUpInside)
         joinButton.accessibilityIdentifier = "joinRoom"
 
@@ -252,7 +252,7 @@ class ViewController: UIViewController {
         let stack = UIStackView(arrangedSubviews: [peerStatusLabel, buttons])
         stack.axis = .vertical
         stack.spacing = 8
-        return labeledControl(title: "附近对战（无需网络）", control: stack)
+        return labeledControl(title: String(localized: "Nearby Match (No Internet Required)"), control: stack)
     }
 
     private func rulesCard() -> UIView {
@@ -262,18 +262,18 @@ class ViewController: UIViewController {
         card.layer.borderColor = UIColor.appBorder.cgColor
 
         let heading = UILabel()
-        heading.text = "规则"
+        heading.text = String(localized: "Rules")
         heading.font = .systemFont(ofSize: 16, weight: .semibold)
         heading.textColor = .appHeading
 
         let body = UILabel()
         body.numberOfLines = 0
         let rules = [
-            "10×10 棋盘，每方 20 子，只走深色格。",
-            "普通子斜向前进一格；可向任意斜向跳吃。",
-            "跳吃为强制，且必须选择吃子最多的走法。",
-            "普通子到达底线升变为「王」，可远距离滑行与跳吃。",
-            "无棋可走的一方判负。",
+            String(localized: "The board is 10×10. Each side has 20 pieces and plays only on dark squares."),
+            String(localized: "Men move one square diagonally forward and may capture in any diagonal direction."),
+            String(localized: "Captures are mandatory, and the move capturing the most pieces must be chosen."),
+            String(localized: "A man reaching the far edge becomes a king, which can move and capture over long distances."),
+            String(localized: "A player with no legal move loses."),
         ]
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4
@@ -482,12 +482,15 @@ class ViewController: UIViewController {
         multipeer.onInvitation = { [weak self] peerName, respond in
             guard let self else { return respond(false) }
             let alert = UIAlertController(
-                title: "对战邀请",
-                message: "「\(peerName)」想加入你的对局",
+                title: String(localized: "Match Invitation"),
+                message: String(
+                    format: String(localized: "“%@” wants to join your match."),
+                    peerName
+                ),
                 preferredStyle: .alert
             )
-            alert.addAction(UIAlertAction(title: "拒绝", style: .cancel) { _ in respond(false) })
-            alert.addAction(UIAlertAction(title: "接受", style: .default) { _ in respond(true) })
+            alert.addAction(UIAlertAction(title: String(localized: "Decline"), style: .cancel) { _ in respond(false) })
+            alert.addAction(UIAlertAction(title: String(localized: "Accept"), style: .default) { _ in respond(true) })
             self.present(alert, animated: true)
         }
 
@@ -497,7 +500,7 @@ class ViewController: UIViewController {
 
         multipeer.onPeerDisconnected = { [weak self] _ in
             guard let self, self.mode == .peer else { return }
-            self.leavePeerMode(message: "与对方的连接已断开，已返回人机对战模式。")
+            self.leavePeerMode(message: String(localized: "The connection was lost. You have returned to AI mode."))
         }
 
         multipeer.onMessage = { [weak self] message in
@@ -540,7 +543,7 @@ class ViewController: UIViewController {
         localColor = pendingRole
         boardView.flipped = localColor == .black
         difficultySection.isHidden = true
-        subtitleLabel.text = "International Draughts · 附近对战"
+        subtitleLabel.text = String(localized: "International Draughts · Nearby Match")
         resetBoard()
         updatePeerUI()
     }
@@ -571,12 +574,16 @@ class ViewController: UIViewController {
         localColor = .white
         boardView.flipped = false
         difficultySection.isHidden = false
-        subtitleLabel.text = "International Draughts · 人机对战"
+        subtitleLabel.text = String(localized: "International Draughts · Play against AI")
         resetBoard()
         updatePeerUI()
         if let message {
-            let alert = UIAlertController(title: "连接已断开", message: message, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "好", style: .default))
+            let alert = UIAlertController(
+                title: String(localized: "Connection Lost"),
+                message: message,
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: String(localized: "OK"), style: .default))
             present(alert, animated: true)
         }
     }
@@ -597,11 +604,13 @@ class ViewController: UIViewController {
         blackCountLabel.text = "\(Engine.countPieces(board: board, color: .black))"
         switch mode {
         case .ai:
-            whiteNameLabel.text = "你（白）"
-            blackNameLabel.text = "电脑（黑）"
+            whiteNameLabel.text = String(localized: "You (White)")
+            blackNameLabel.text = String(localized: "Computer (Black)")
         case .peer:
-            whiteNameLabel.text = localColor == .white ? "你（白）" : "对方（白）"
-            blackNameLabel.text = localColor == .black ? "你（黑）" : "对方（黑）"
+            whiteNameLabel.text = localColor == .white
+                ? String(localized: "You (White)") : String(localized: "Opponent (White)")
+            blackNameLabel.text = localColor == .black
+                ? String(localized: "You (Black)") : String(localized: "Opponent (Black)")
         }
 
         statusLabel.layer.borderColor = UIColor.accentBorder.cgColor
@@ -617,32 +626,46 @@ class ViewController: UIViewController {
         switch status {
         case .whiteWin, .blackWin:
             if mode == .ai {
-                return localWon ? "🎉 你赢了！" : "💻 电脑获胜"
+                return localWon
+                    ? String(localized: "🎉 You won!") : String(localized: "💻 Computer wins")
             }
-            return localWon ? "🎉 你赢了！" : "对方获胜"
+            return localWon
+                ? String(localized: "🎉 You won!") : String(localized: "Opponent wins")
         case .draw:
-            return "平局"
+            return String(localized: "Draw")
         case .playing:
-            let side = localColor == .white ? "白方" : "黑方"
+            let side = localColor == .white
+                ? String(localized: "White") : String(localized: "Black")
             if turn == localColor {
-                return "你的回合（\(side)）"
+                return String(
+                    format: String(localized: "Your turn (%@)"),
+                    side
+                )
             }
-            return mode == .ai ? "电脑思考中…" : "等待对方走子…"
+            return mode == .ai
+                ? String(localized: "Computer is thinking…")
+                : String(localized: "Waiting for opponent…")
         }
     }
 
     private func updatePeerUI() {
         joinButton.isHidden = multipeer.isConnected || isHostingRoom
         if multipeer.isConnected {
-            let side = localColor == .white ? "你执白，先行" : "你执黑，后行"
-            peerStatusLabel.text = "已连接：\(multipeer.connectedPeerName ?? "对方")（\(side)）"
-            hostButton.configuration?.title = "断开连接"
+            let side = localColor == .white
+                ? String(localized: "You are White and move first")
+                : String(localized: "You are Black and move second")
+            peerStatusLabel.text = String(
+                format: String(localized: "Connected to %@ (%@)"),
+                multipeer.connectedPeerName ?? String(localized: "Opponent"),
+                side
+            )
+            hostButton.configuration?.title = String(localized: "Disconnect")
         } else if isHostingRoom {
-            peerStatusLabel.text = "等待对手加入…（对方选择「搜索房间」即可找到你）"
-            hostButton.configuration?.title = "取消"
+            peerStatusLabel.text = String(localized: "Waiting for an opponent… They can find you by choosing Find Room.")
+            hostButton.configuration?.title = String(localized: "Cancel")
         } else {
-            peerStatusLabel.text = "未连接"
-            hostButton.configuration?.title = "创建房间"
+            peerStatusLabel.text = String(localized: "Not connected")
+            hostButton.configuration?.title = String(localized: "Create Room")
         }
     }
 

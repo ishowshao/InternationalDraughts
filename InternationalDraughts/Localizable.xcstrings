@@ -1,0 +1,288 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Accept" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "接受" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "接受" } }
+      }
+    },
+    "A man reaching the far edge becomes a king, which can move and capture over long distances." : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "普通子到达底线升变为「王」，可远距离滑行与跳吃。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "普通子到達底線升變為「王」，可遠距離滑行與跳吃。" } }
+      }
+    },
+    "A player with no legal move loses." : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无棋可走的一方判负。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "無棋可走的一方判負。" } }
+      }
+    },
+    "Black" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "黑方" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "黑方" } }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "取消" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "取消" } }
+      }
+    },
+    "Captures are mandatory, and the move capturing the most pieces must be chosen." : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "跳吃为强制，且必须选择吃子最多的走法。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "跳吃為強制，且必須選擇吃子最多的走法。" } }
+      }
+    },
+    "Computer (Black)" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "电脑（黑）" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "電腦（黑）" } }
+      }
+    },
+    "Computer is thinking…" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "电脑思考中…" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "電腦思考中…" } }
+      }
+    },
+    "Connected to %@ (%@)" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已连接：%@（%@）" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "已連線：%@（%@）" } }
+      }
+    },
+    "Connection Lost" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "连接已断开" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "連線已中斷" } }
+      }
+    },
+    "Create Room" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "创建房间" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "建立房間" } }
+      }
+    },
+    "Decline" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "拒绝" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "拒絕" } }
+      }
+    },
+    "Difficulty" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "难度" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "難度" } }
+      }
+    },
+    "Disconnect" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "断开连接" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "中斷連線" } }
+      }
+    },
+    "Draughts board" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "国际跳棋棋盘" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "國際跳棋棋盤" } }
+      }
+    },
+    "Draw" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "平局" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "和局" } }
+      }
+    },
+    "Easy" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "简单" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "簡單" } }
+      }
+    },
+    "Find Room" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "搜索房间" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "搜尋房間" } }
+      }
+    },
+    "Hard" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "困难" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "困難" } }
+      }
+    },
+    "International Draughts" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "国际跳棋" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "國際跳棋" } }
+      }
+    },
+    "International Draughts · Nearby Match" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "International Draughts · 附近对战" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "International Draughts · 附近對戰" } }
+      }
+    },
+    "International Draughts · Play against AI" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "International Draughts · 人机对战" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "International Draughts · 人機對戰" } }
+      }
+    },
+    "Match Invitation" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "对战邀请" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "對戰邀請" } }
+      }
+    },
+    "Medium" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "中等" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "中等" } }
+      }
+    },
+    "Men move one square diagonally forward and may capture in any diagonal direction." : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "普通子斜向前进一格；可向任意斜向跳吃。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "普通子斜向前進一格；可向任意斜向跳吃。" } }
+      }
+    },
+    "Nearby Match (No Internet Required)" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "附近对战（无需网络）" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "附近對戰（無需網路）" } }
+      }
+    },
+    "New Game" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "新游戏" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "新遊戲" } }
+      }
+    },
+    "Not connected" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "未连接" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "未連線" } }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "好" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "好" } }
+      }
+    },
+    "Opponent" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "对方" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "對方" } }
+      }
+    },
+    "Opponent (Black)" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "对方（黑）" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "對方（黑）" } }
+      }
+    },
+    "Opponent (White)" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "对方（白）" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "對方（白）" } }
+      }
+    },
+    "Opponent wins" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "对方获胜" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "對方獲勝" } }
+      }
+    },
+    "Rules" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "规则" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "規則" } }
+      }
+    },
+    "The board is 10×10. Each side has 20 pieces and plays only on dark squares." : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "10×10 棋盘，每方 20 子，只走深色格。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "10×10 棋盤，每方 20 子，只走深色格。" } }
+      }
+    },
+    "The connection was lost. You have returned to AI mode." : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "与对方的连接已断开，已返回人机对战模式。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "與對方的連線已中斷，已返回人機對戰模式。" } }
+      }
+    },
+    "Waiting for an opponent… They can find you by choosing Find Room." : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "等待对手加入…（对方选择「搜索房间」即可找到你）" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "等待對手加入…（對方選擇「搜尋房間」即可找到你）" } }
+      }
+    },
+    "Waiting for opponent…" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "等待对方走子…" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "等待對方走子…" } }
+      }
+    },
+    "White" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "白方" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "白方" } }
+      }
+    },
+    "You (Black)" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你（黑）" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你（黑）" } }
+      }
+    },
+    "You (White)" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你（白）" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你（白）" } }
+      }
+    },
+    "You are Black and move second" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你执黑，后行" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你執黑，後行" } }
+      }
+    },
+    "You are White and move first" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你执白，先行" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你執白，先行" } }
+      }
+    },
+    "Your turn (%@)" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你的回合（%@）" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你的回合（%@）" } }
+      }
+    },
+    "“%@” wants to join your match." : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "「%@」想加入你的对局" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "「%@」想加入你的對局" } }
+      }
+    },
+    "🎉 You won!" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "🎉 你赢了！" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "🎉 你贏了！" } }
+      }
+    },
+    "💻 Computer wins" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "💻 电脑获胜" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "💻 電腦獲勝" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

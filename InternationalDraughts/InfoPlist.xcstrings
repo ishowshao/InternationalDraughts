@@ -1,0 +1,20 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "International Draughts" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "国际跳棋" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "國際跳棋" } }
+      }
+    },
+    "NSLocalNetworkUsageDescription" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Discover nearby players and connect for two-player matches without the internet." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "用于发现附近的玩家并建立连接，进行无需互联网的两人对战。" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "用於發現附近的玩家並建立連線，進行無需網際網路的雙人對戰。" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}
