@@ -201,4 +201,30 @@ final class InternationalDraughtsUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["International Draughts"].waitForExistence(timeout: 5))
         XCTAssertEqual(app.staticTexts["status"].label, "Your turn (White)")
     }
+
+    func testEnglishStoreScreenshots() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = makeApp(language: "en")
+        app.launch()
+
+        let board = app.otherElements["board"]
+        XCTAssertTrue(board.waitForExistence(timeout: 5))
+        let status = app.staticTexts["status"]
+        XCTAssertEqual(status.label, "Your turn (White)")
+        Thread.sleep(forTimeInterval: 0.5)
+        attach(app, "01-home")
+
+        tapCell(board, 6, 3)
+        Thread.sleep(forTimeInterval: 3)
+        attach(app, "02-selected-move")
+
+        app.buttons["Hard"].tap()
+        Thread.sleep(forTimeInterval: 3)
+        attach(app, "03-hard-difficulty")
+
+        app.buttons["newGame"].tap()
+        XCTAssertEqual(status.label, "Your turn (White)")
+        Thread.sleep(forTimeInterval: 0.5)
+        attach(app, "04-new-game")
+    }
 }

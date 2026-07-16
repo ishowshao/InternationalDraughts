@@ -5,8 +5,8 @@
 - Platform: iOS
 - Bundle ID: `com.shshaoxia.InternationalDraughts`
 - SKU: `com.shshaoxia.InternationalDraughts`
-- Version: `1.0`
-- Build: `1`
+- Version: `1.1`
+- Build: `2`
 - Primary locale: Simplified Chinese
 - Category: Games
 - Primary subcategory: Board
@@ -56,7 +56,46 @@
 
 ### What's New
 
-首个版本：支持 10x10 国际跳棋、人机对战、三档 AI 难度和附近双人对战。
+新增完整英文界面和英文 App Store 信息。App 现在会根据系统语言自动显示中文或英文，并完善了简体中文和繁体中文支持。
+
+## English (U.S.) Store Listing
+
+### Name
+
+International Draughts 10x10
+
+### Subtitle
+
+Classic Rules, AI & Local Play
+
+### Promotional Text
+
+Play a classic 10x10 match anytime, practice against the built-in AI, or challenge someone nearby without an internet connection.
+
+### Description
+
+Enjoy International Draughts on a complete 10x10 board, designed for both iPhone and iPad.
+
+The app supports mandatory captures, maximum-capture priority, multi-jump sequences, flying kings, and promotion. Practice whenever you like against the built-in AI, with Easy, Medium, and Hard difficulty levels.
+
+When another device is nearby, create or find a room for a local two-player match. Nearby matches require no internet account, and game data is never sent to a server.
+
+Key features:
+
+- Full 10x10 International Draughts board
+- Standard captures, multi-jumps, flying kings, and promotion
+- Three AI difficulty levels
+- Nearby two-player matches
+- Adaptive iPhone and iPad layouts
+- No ads, no account, and no data collection
+
+### Keywords
+
+draughts,checkers,10x10,board game,strategy,AI,two player,offline,king,capture
+
+### What's New
+
+Added a complete English interface and App Store listing. The app now follows your system language, showing Chinese on Chinese-language devices and English everywhere else, with improved Simplified and Traditional Chinese support.
 
 ## Review Information
 
