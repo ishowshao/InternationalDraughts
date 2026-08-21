@@ -5,8 +5,9 @@
 - Platform: iOS
 - Bundle ID: `com.shshaoxia.InternationalDraughts`
 - SKU: `com.shshaoxia.InternationalDraughts`
-- Version: `1.1`
-- Build: `2`
+- Version: `1.2`
+- Build: `3`
+- Release: Automatic after approval
 - Primary locale: Simplified Chinese
 - Category: Games
 - Primary subcategory: Board
@@ -56,7 +57,7 @@
 
 ### What's New
 
-新增完整英文界面和英文 App Store 信息。App 现在会根据系统语言自动显示中文或英文，并完善了简体中文和繁体中文支持。
+优化附近双人对战连接稳定性，短暂切换到其他 App 后返回时不再立即断开，可以继续当前对局。
 
 ## English (U.S.) Store Listing
 
@@ -95,7 +96,7 @@ draughts,checkers,10x10,board game,strategy,AI,two player,offline,king,capture
 
 ### What's New
 
-Added a complete English interface and App Store listing. The app now follows your system language, showing Chinese on Chinese-language devices and English everywhere else, with improved Simplified and Traditional Chinese support.
+Improved nearby multiplayer connection stability. Briefly switching to another app no longer immediately disconnects the match, so you can return and keep playing.
 
 ## Review Information
 
