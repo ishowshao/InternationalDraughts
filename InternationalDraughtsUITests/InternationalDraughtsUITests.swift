@@ -70,6 +70,15 @@ final class InternationalDraughtsUITests: XCTestCase {
         waitLabel(peerStatus, "你执白", timeout: 10, contains: true)
         attach(app, "host-connected")
 
+        // A brief app switch must stay inside the background-task grace period
+        // instead of tearing down the nearby match immediately.
+        XCUIDevice.shared.press(.home)
+        Thread.sleep(forTimeInterval: 10)
+        app.activate()
+        XCTAssertTrue(board.waitForExistence(timeout: 10))
+        waitLabel(peerStatus, "已连接", timeout: 10, contains: true)
+        attach(app, "host-still-connected-after-background")
+
         let status = app.staticTexts["status"]
         waitLabel(status, "你的回合（白方）", timeout: 10)
         tapCell(board, 6, 3)

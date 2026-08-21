@@ -42,6 +42,8 @@ final class MultipeerService: NSObject {
     private var browser: MCNearbyServiceBrowser?
     private var autoJoin = false
     private var invitedPeers: Set<MCPeerID> = []
+    private let backgroundKeeper = BackgroundActivityKeeper()
+    private var lifecycleObservers: [NSObjectProtocol] = []
 
     /// Test hook (-mpAutoHost): accept the first invitation without asking.
     var autoAcceptInvitations = false
@@ -61,6 +63,15 @@ final class MultipeerService: NSObject {
 
     var isConnected: Bool { !session.connectedPeers.isEmpty }
     var connectedPeerName: String? { session.connectedPeers.first?.displayName }
+
+    override init() {
+        super.init()
+        observeAppLifecycle()
+    }
+
+    deinit {
+        lifecycleObservers.forEach(NotificationCenter.default.removeObserver)
+    }
 
     // MARK: - Hosting (创建房间)
 
@@ -97,6 +108,26 @@ final class MultipeerService: NSObject {
 
     // MARK: - Lifecycle
 
+    /// Keep an established match alive during a short trip to the background.
+    private func observeAppLifecycle() {
+        let center = NotificationCenter.default
+        lifecycleObservers = [
+            center.addObserver(forName: UIApplication.didEnterBackgroundNotification,
+                               object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.applicationDidEnterBackground() }
+            },
+            center.addObserver(forName: UIApplication.willEnterForegroundNotification,
+                               object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.backgroundKeeper.end() }
+            },
+        ]
+    }
+
+    private func applicationDidEnterBackground() {
+        guard isConnected else { return }
+        backgroundKeeper.begin()
+    }
+
     /// Stop advertising/browsing; keeps an established session alive.
     func stopDiscovery() {
         advertiser?.stopAdvertisingPeer()
@@ -108,6 +139,7 @@ final class MultipeerService: NSObject {
     }
 
     func disconnect() {
+        backgroundKeeper.end()
         stopDiscovery()
         session.disconnect()
     }
@@ -132,6 +164,7 @@ extension MultipeerService: MCSessionDelegate {
                 self.stopDiscovery()
                 self.onPeerConnected?(peerID.displayName)
             case .notConnected:
+                self.backgroundKeeper.end()
                 self.onPeerDisconnected?(peerID.displayName)
             case .connecting:
                 break
