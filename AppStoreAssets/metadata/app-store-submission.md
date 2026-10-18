@@ -5,8 +5,8 @@
 - Platform: iOS
 - Bundle ID: `com.shshaoxia.InternationalDraughts`
 - SKU: `com.shshaoxia.InternationalDraughts`
-- Version: `1.2`
-- Build: `3`
+- Version: `1.3`
+- Build: `4`
 - Release: Automatic after approval
 - Primary locale: Simplified Chinese
 - Category: Games
@@ -57,7 +57,7 @@
 
 ### What's New
 
-优化附近双人对战连接稳定性，短暂切换到其他 App 后返回时不再立即断开，可以继续当前对局。
+人机对战新增执白／执黑选择。选择执黑时，电脑先行，棋盘自动调整朝向，让己方棋子位于下方。重新开局会保留当前选边；切换颜色即可开始新的一局。
 
 ## English (U.S.) Store Listing
 
@@ -96,7 +96,7 @@ draughts,checkers,10x10,board game,strategy,AI,two player,offline,king,capture
 
 ### What's New
 
-Improved nearby multiplayer connection stability. Briefly switching to another app no longer immediately disconnects the match, so you can return and keep playing.
+Choose to play as White or Black against the computer. When you play as Black, the computer moves first and the board rotates to keep your pieces at the bottom. New Game keeps your selected color; changing colors starts a fresh game.
 
 ## Review Information
 
@@ -104,7 +104,7 @@ Improved nearby multiplayer connection stability. Briefly switching to another a
 - Demo account: Not applicable
 - Notes:
 
-This app does not require an account. Nearby two-player matches use Apple's local network and MultipeerConnectivity features. Reviewers can fully test the core game by playing against the built-in AI. To test nearby matches, run the app on two devices on the same local network, create a room on one device, then search and join from the other device.
+This app does not require an account. Nearby two-player matches use Apple's local network and MultipeerConnectivity features. Reviewers can fully test the core game by playing against the built-in AI. To test nearby matches, run the app on two devices on the same local network, create a room on one device, then search and join from the other device. In version 1.3, the color selector below the scoreboard lets players choose White or Black against the computer. Selecting Black starts a new game, rotates the board, and lets the computer play White first. Changing colors restarts the game.
 
 ## Privacy
 
@@ -136,3 +136,15 @@ This app does not require an account. Nearby two-player matches use Apple's loca
   - `AppStoreAssets/screenshots/ipad-13-02-selected-move.png`
   - `AppStoreAssets/screenshots/ipad-13-03-ai-reply.png`
   - `AppStoreAssets/screenshots/ipad-13-04-new-game.png`
+
+## Submission Record — 1.3 (4)
+
+- Submitted: 2026-10-18T02:33:02.899Z
+- App Store version ID: `98c50f23-e75a-47cc-bd1e-c19548b14a7c`
+- Build ID: `c6f32343-28c2-41a0-8498-39a96ab257dd`
+- Review submission ID: `ba02f539-464e-4244-996c-ed4dceb5b1ba`
+- Build processing state at submission: `VALID`
+- Version and review submission state: `WAITING_FOR_REVIEW`
+- Release type: `AFTER_APPROVAL`
+- Feature commit: `4d1f4ee603a6b2d54829df7dbf6a39a7f92e52e7`
+- Validation: Release simulator tests passed (3 engine tests and 3 UI tests); signed iOS archive verified and uploaded successfully.
