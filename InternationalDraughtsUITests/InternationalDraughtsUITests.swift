@@ -182,6 +182,40 @@ final class InternationalDraughtsUITests: XCTestCase {
         attach(app, "new-game")
     }
 
+    func testChooseBlackAndSwitchBackToWhite() throws {
+        XCUIDevice.shared.orientation = .portrait
+        let app = makeApp()
+        app.launch()
+        let board = app.otherElements["board"]
+        XCTAssertTrue(board.waitForExistence(timeout: 5))
+        let colors = app.segmentedControls["playerColor"]
+        colors.buttons["黑方"].tap()
+        let status = app.staticTexts["status"]
+        waitLabel(status, "你的回合（黑方）", timeout: 15)
+        XCTAssertTrue(app.staticTexts["电脑（白）"].exists)
+        XCTAssertTrue(app.staticTexts["你（黑）"].exists)
+        let opening = board.value as? String
+        XCTAssertTrue(opening?.contains("turn:b last:") == true)
+
+        // Black's model (3,4)->(4,5), seen from Black's rotated board.
+        tapCell(board, 6, 5)
+        tapCell(board, 5, 4)
+        let replied = NSPredicate(format: "value != %@ AND value BEGINSWITH %@", opening ?? "", "turn:b")
+        wait(for: [expectation(for: replied, evaluatedWith: board)], timeout: 15)
+        attach(app, "black-after-ai-reply")
+
+        app.buttons["newGame"].tap()
+        waitLabel(status, "你的回合（黑方）", timeout: 15)
+        XCTAssertTrue(colors.buttons["黑方"].isSelected)
+        colors.buttons["白方"].tap()
+        XCTAssertEqual(status.label, "你的回合（白方）")
+        XCTAssertEqual(board.value as? String, "turn:w last:")
+        tapCell(board, 6, 3)
+        tapCell(board, 5, 4)
+        waitLabel(status, "你的回合（白方）", timeout: 15)
+        attach(app, "white-after-switching-back")
+    }
+
     func testEnglishLocalization() throws {
         XCUIDevice.shared.orientation = .portrait
         let app = makeApp(language: "en")

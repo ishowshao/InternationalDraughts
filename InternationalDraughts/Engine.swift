@@ -241,7 +241,7 @@ enum Engine {
     private static let kingValue = 280.0
     private static let winScore = 1_000_000.0
 
-    /// Static evaluation. Positive favors Black (the AI).
+    /// Static evaluation. Positive favors Black.
     private static func evaluate(board: Board) -> Double {
         var score = 0.0
         for i in board.indices {
@@ -294,19 +294,19 @@ enum Engine {
         }
     }
 
-    /// Choose the AI's move (Black). Returns nil if no move is available.
-    static func chooseAIMove(board: Board, difficulty: Difficulty) -> Move? {
-        let moves = legalMoves(board: board, color: .black)
+    /// Choose the AI's move for the requested color. Returns nil if no move is available.
+    static func chooseAIMove(board: Board, difficulty: Difficulty, color: PieceColor = .black) -> Move? {
+        let moves = legalMoves(board: board, color: color)
         if moves.isEmpty { return nil }
         if moves.count == 1 { return moves[0] }
 
         let depth = difficulty.searchDepth
-        var best = -Double.infinity
+        var best = color == .black ? -Double.infinity : Double.infinity
         var bestMoves: [Move] = []
         for m in moves {
             let v = minimax(board: applyMove(board: board, move: m),
-                            depth: depth - 1, alpha: -.infinity, beta: .infinity, color: .white)
-            if v > best {
+                            depth: depth - 1, alpha: -.infinity, beta: .infinity, color: color.opponent)
+            if color == .black ? v > best : v < best {
                 best = v
                 bestMoves = [m]
             } else if v == best {

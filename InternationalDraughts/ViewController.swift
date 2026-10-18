@@ -7,7 +7,7 @@
 //  landscape places it to the right.
 //
 //  Two game modes:
-//  - .ai   人机对战：player is White, minimax AI is Black.
+//  - .ai   人机对战：player chooses a color, minimax AI plays the opposite color.
 //  - .peer 附近对战：MultipeerConnectivity match; the room host plays White,
 //    the joiner plays Black and sees the board rotated 180°.
 //
@@ -31,7 +31,7 @@ class ViewController: UIViewController {
     private var difficulty: Difficulty = .medium
 
     private var mode: GameMode = .ai
-    /// The color this device plays. Always .white in AI mode.
+    /// The color this device plays.
     private var localColor: PieceColor = .white
 
     // Current selection / in-progress capture sequence (path of squares).
@@ -42,8 +42,7 @@ class ViewController: UIViewController {
     // Invalidates in-flight AI searches when a new game starts mid-think.
     private var aiGeneration = 0
 
-    // It is the AI's turn to think whenever Black is to move during play.
-    private var thinking: Bool { mode == .ai && turn == .black && status == .playing }
+    private var thinking: Bool { mode == .ai && turn == localColor.opponent && status == .playing }
 
     private var playerMoves: [Move] {
         turn == localColor && status == .playing
@@ -92,6 +91,10 @@ class ViewController: UIViewController {
     private let blackCountLabel = UILabel()
     private let difficultyControl = UISegmentedControl(items: Difficulty.allCases.map { $0.label })
     private var difficultySection = UIView()
+    private let colorControl = UISegmentedControl(items: [
+        String(localized: "White"), String(localized: "Black"),
+    ])
+    private var colorSection = UIView()
     private let peerStatusLabel = UILabel()
     private let hostButton = UIButton(configuration: .bordered())
     private let joinButton = UIButton(configuration: .bordered())
@@ -157,6 +160,13 @@ class ViewController: UIViewController {
         difficultyControl.selectedSegmentIndex = difficulty.rawValue
         difficultyControl.addTarget(self, action: #selector(difficultyChanged), for: .valueChanged)
 
+        colorControl.selectedSegmentIndex = 0
+        colorControl.accessibilityIdentifier = "playerColor"
+        colorControl.addTarget(self, action: #selector(colorChanged), for: .valueChanged)
+        colorSection = labeledControl(
+            title: String(localized: "Your color (changing starts a new game)"), control: colorControl
+        )
+
         var newGameConfig = UIButton.Configuration.filled()
         newGameConfig.title = String(localized: "New Game")
         newGameConfig.baseBackgroundColor = .accent
@@ -174,6 +184,7 @@ class ViewController: UIViewController {
         panelStack.addArrangedSubview(statusLabel)
         panelStack.addArrangedSubview(scoreRow(color: .white, nameLabel: whiteNameLabel, countLabel: whiteCountLabel))
         panelStack.addArrangedSubview(scoreRow(color: .black, nameLabel: blackNameLabel, countLabel: blackCountLabel))
+        panelStack.addArrangedSubview(colorSection)
         panelStack.addArrangedSubview(difficultySection)
         panelStack.addArrangedSubview(peerCard())
         panelStack.addArrangedSubview(newGameButton)
@@ -222,6 +233,7 @@ class ViewController: UIViewController {
     private func labeledControl(title: String, control: UIView) -> UIView {
         let label = UILabel()
         label.text = title
+        label.numberOfLines = 0
         label.font = .systemFont(ofSize: 14)
         label.textColor = .appText
         let stack = UIStackView(arrangedSubviews: [label, control])
@@ -436,7 +448,7 @@ class ViewController: UIViewController {
         AudioServicesPlaySystemSound(1057) // "Tink"
     }
 
-    /// Drive the AI when it is Black's turn. The search runs off the main thread;
+    /// Drive the AI when it is the computer's turn. The search runs off the main thread;
     /// the short delay mirrors the web version and lets the move land naturally.
     private func scheduleAIMoveIfNeeded() {
         guard thinking else { return }
@@ -444,14 +456,21 @@ class ViewController: UIViewController {
         let generation = aiGeneration
         let snapshot = board
         let level = difficulty
+        let aiColor = localColor.opponent
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.35) { [weak self] in
-            let move = Engine.chooseAIMove(board: snapshot, difficulty: level)
+            let move = Engine.chooseAIMove(board: snapshot, difficulty: level, color: aiColor)
             DispatchQueue.main.async {
                 guard let self, generation == self.aiGeneration, self.mode == .ai,
-                      self.turn == .black, self.status == .playing else { return }
+                      self.turn == aiColor, self.thinking else { return }
                 if let move { self.commit(move) }
             }
         }
+    }
+
+    @objc private func colorChanged() {
+        guard mode == .ai else { return }
+        localColor = colorControl.selectedSegmentIndex == 0 ? .white : .black
+        resetBoard()
     }
 
     @objc private func difficultyChanged() {
@@ -473,7 +492,9 @@ class ViewController: UIViewController {
         selected = nil
         partialPath = []
         lastMove = []
+        boardView.flipped = localColor == .black
         updateUI()
+        scheduleAIMoveIfNeeded()
     }
 
     // MARK: - Multipeer flow
@@ -543,6 +564,7 @@ class ViewController: UIViewController {
         localColor = pendingRole
         boardView.flipped = localColor == .black
         difficultySection.isHidden = true
+        colorSection.isHidden = true
         subtitleLabel.text = String(localized: "International Draughts · Nearby Match")
         resetBoard()
         updatePeerUI()
@@ -571,9 +593,9 @@ class ViewController: UIViewController {
         multipeer.disconnect()
         isHostingRoom = false
         mode = .ai
-        localColor = .white
-        boardView.flipped = false
+        localColor = colorControl.selectedSegmentIndex == 0 ? .white : .black
         difficultySection.isHidden = false
+        colorSection.isHidden = false
         subtitleLabel.text = String(localized: "International Draughts · Play against AI")
         resetBoard()
         updatePeerUI()
@@ -604,8 +626,10 @@ class ViewController: UIViewController {
         blackCountLabel.text = "\(Engine.countPieces(board: board, color: .black))"
         switch mode {
         case .ai:
-            whiteNameLabel.text = String(localized: "You (White)")
-            blackNameLabel.text = String(localized: "Computer (Black)")
+            whiteNameLabel.text = localColor == .white
+                ? String(localized: "You (White)") : String(localized: "Computer (White)")
+            blackNameLabel.text = localColor == .black
+                ? String(localized: "You (Black)") : String(localized: "Computer (Black)")
         case .peer:
             whiteNameLabel.text = localColor == .white
                 ? String(localized: "You (White)") : String(localized: "Opponent (White)")

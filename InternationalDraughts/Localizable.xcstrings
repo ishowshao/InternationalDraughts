@@ -1,6 +1,38 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+  "Your color (changing starts a new game)": {
+    "localizations": {
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "执子颜色（切换将开始新游戏）"
+        }
+      },
+      "zh-Hant": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "執子顏色（切換將開始新遊戲）"
+        }
+      }
+    }
+  },
+  "Computer (White)": {
+    "localizations": {
+      "zh-Hans": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "电脑（白）"
+        }
+      },
+      "zh-Hant": {
+        "stringUnit": {
+          "state": "translated",
+          "value": "電腦（白）"
+        }
+      }
+    }
+  },
     "Accept" : {
       "localizations" : {
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "接受" } },

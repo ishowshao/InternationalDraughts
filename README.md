@@ -6,7 +6,7 @@ An iOS implementation of International Draughts (10x10), written with UIKit and 
 
 - 10x10 International Draughts board with playable-square coordinates.
 - Standard move generation with mandatory captures, maximum-capture selection, multi-jump sequences, flying kings, and promotion.
-- AI opponent for Black with easy, medium, and hard difficulty levels.
+- Choose White or Black against the AI, with easy, medium, and hard difficulty levels. Changing color starts a new game; White moves first.
 - Nearby two-player mode using local peer discovery, without an internet connection.
 - Rotated board for the Black player in nearby matches.
 - Portrait and landscape adaptive layout.
@@ -91,7 +91,7 @@ The app uses `NSLocalNetworkUsageDescription` and Bonjour service declarations i
 
 - 10x10 国际跳棋棋盘，并显示可行棋格的坐标。
 - 标准走法生成：强制吃子、最大吃子数优先、连续跳吃、王棋长距离移动和升王。
-- 黑方 AI 对手，支持简单、中等、困难三档难度。
+- 人机对战可选择执白或执黑，支持简单、中等、困难三档难度；切换颜色开始新游戏，白方先行。
 - 附近双人对战，通过本地设备发现建立连接，无需互联网。
 - 附近对战中，执黑玩家看到旋转后的棋盘。
 - 支持竖屏和横屏自适应布局。
