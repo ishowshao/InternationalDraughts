@@ -5,8 +5,8 @@
 - Platform: iOS
 - Bundle ID: `com.shshaoxia.InternationalDraughts`
 - SKU: `com.shshaoxia.InternationalDraughts`
-- Version: `1.3`
-- Build: `4`
+- Version: `1.4`
+- Build: `5`
 - Release: Automatic after approval
 - Primary locale: Simplified Chinese
 - Category: Games
@@ -57,7 +57,7 @@
 
 ### What's New
 
-人机对战新增执白／执黑选择。选择执黑时，电脑先行，棋盘自动调整朝向，让己方棋子位于下方。重新开局会保留当前选边；切换颜色即可开始新的一局。
+简化对局界面，移除顶部标题和副标题，为棋盘和操作面板留出更多空间。
 
 ## English (U.S.) Store Listing
 
@@ -96,7 +96,7 @@ draughts,checkers,10x10,board game,strategy,AI,two player,offline,king,capture
 
 ### What's New
 
-Choose to play as White or Black against the computer. When you play as Black, the computer moves first and the board rotates to keep your pieces at the bottom. New Game keeps your selected color; changing colors starts a fresh game.
+A cleaner game screen: removed the top title and subtitle to give the board and controls more space.
 
 ## Review Information
 

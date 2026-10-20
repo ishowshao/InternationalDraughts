@@ -79,8 +79,6 @@ class ViewController: UIViewController {
 
     // MARK: - Views
 
-    private let titleLabel = UILabel()
-    private let subtitleLabel = UILabel()
     private let boardView = BoardView()
     private let panelScroll = UIScrollView()
     private let panelStack = UIStackView()
@@ -137,16 +135,6 @@ class ViewController: UIViewController {
     // MARK: - View construction
 
     private func buildViews() {
-        titleLabel.text = String(localized: "International Draughts")
-        titleLabel.font = .systemFont(ofSize: 32, weight: .bold)
-        titleLabel.textColor = .appHeading
-        titleLabel.textAlignment = .center
-
-        subtitleLabel.text = String(localized: "International Draughts · Play against AI")
-        subtitleLabel.font = .systemFont(ofSize: 14)
-        subtitleLabel.textColor = .appText
-        subtitleLabel.textAlignment = .center
-
         statusLabel.font = .systemFont(ofSize: 16, weight: .semibold)
         statusLabel.textColor = .appHeading
         statusLabel.textAlignment = .center
@@ -190,11 +178,11 @@ class ViewController: UIViewController {
         panelStack.addArrangedSubview(newGameButton)
         panelStack.addArrangedSubview(rulesCard())
 
-        for v in [titleLabel, subtitleLabel, boardView, panelScroll, panelStack] {
+        for v in [boardView, panelScroll, panelStack] {
             v.translatesAutoresizingMaskIntoConstraints = false
         }
         panelScroll.addSubview(panelStack)
-        for v in [titleLabel, subtitleLabel, boardView, panelScroll] {
+        for v in [boardView, panelScroll] {
             view.addSubview(v)
         }
     }
@@ -316,13 +304,8 @@ class ViewController: UIViewController {
     private func buildConstraints() {
         let safe = view.safeAreaLayoutGuide
 
-        // Shared: header on top, panel stack fills the scroll view.
+        // Shared: panel stack fills the scroll view.
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: safe.topAnchor, constant: 8),
-            titleLabel.centerXAnchor.constraint(equalTo: safe.centerXAnchor),
-            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 2),
-            subtitleLabel.centerXAnchor.constraint(equalTo: safe.centerXAnchor),
-
             panelStack.topAnchor.constraint(equalTo: panelScroll.contentLayoutGuide.topAnchor, constant: 4),
             panelStack.bottomAnchor.constraint(equalTo: panelScroll.contentLayoutGuide.bottomAnchor, constant: -16),
             panelStack.leadingAnchor.constraint(equalTo: panelScroll.contentLayoutGuide.leadingAnchor),
@@ -332,12 +315,12 @@ class ViewController: UIViewController {
             boardView.widthAnchor.constraint(equalTo: boardView.heightAnchor),
         ])
 
-        // Portrait: board under the header, panel scrolls below it.
+        // Portrait: board at the top, panel scrolls below it.
         let portraitBoardWidth = boardView.widthAnchor.constraint(
             equalTo: safe.widthAnchor, constant: -32)
         portraitBoardWidth.priority = .defaultHigh
         portraitConstraints = [
-            boardView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 16),
+            boardView.topAnchor.constraint(equalTo: safe.topAnchor, constant: 16),
             boardView.centerXAnchor.constraint(equalTo: safe.centerXAnchor),
             portraitBoardWidth,
             boardView.widthAnchor.constraint(lessThanOrEqualToConstant: 560),
@@ -355,11 +338,11 @@ class ViewController: UIViewController {
             equalTo: boardArea.heightAnchor)
         landscapeBoardHeight.priority = .defaultHigh
         landscapeConstraints = [
-            panelScroll.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 12),
+            panelScroll.topAnchor.constraint(equalTo: safe.topAnchor, constant: 12),
             panelScroll.bottomAnchor.constraint(equalTo: safe.bottomAnchor),
             panelScroll.trailingAnchor.constraint(equalTo: safe.trailingAnchor, constant: -16),
             panelScroll.widthAnchor.constraint(equalToConstant: 300),
-            boardArea.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 12),
+            boardArea.topAnchor.constraint(equalTo: safe.topAnchor, constant: 12),
             boardArea.bottomAnchor.constraint(equalTo: safe.bottomAnchor, constant: -12),
             boardArea.leadingAnchor.constraint(equalTo: safe.leadingAnchor, constant: 16),
             boardArea.trailingAnchor.constraint(equalTo: panelScroll.leadingAnchor, constant: -16),
@@ -565,7 +548,6 @@ class ViewController: UIViewController {
         boardView.flipped = localColor == .black
         difficultySection.isHidden = true
         colorSection.isHidden = true
-        subtitleLabel.text = String(localized: "International Draughts · Nearby Match")
         resetBoard()
         updatePeerUI()
     }
@@ -596,7 +578,6 @@ class ViewController: UIViewController {
         localColor = colorControl.selectedSegmentIndex == 0 ? .white : .black
         difficultySection.isHidden = false
         colorSection.isHidden = false
-        subtitleLabel.text = String(localized: "International Draughts · Play against AI")
         resetBoard()
         updatePeerUI()
         if let message {
