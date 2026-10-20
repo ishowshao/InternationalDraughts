@@ -6,7 +6,7 @@
 - Bundle ID: `com.shshaoxia.InternationalDraughts`
 - SKU: `com.shshaoxia.InternationalDraughts`
 - Version: `1.4`
-- Build: `5`
+- Build: `6`
 - Release: Automatic after approval
 - Primary locale: Simplified Chinese
 - Category: Games
@@ -57,7 +57,7 @@
 
 ### What's New
 
-简化对局界面，移除顶部标题和副标题，为棋盘和操作面板留出更多空间。
+适配 iPhone Duo，棋盘与操作面板随展开、折叠和屏幕方向自动调整，半折叠时避开折弯区域。简化顶部界面，为对局留出更多空间。
 
 ## English (U.S.) Store Listing
 
@@ -96,7 +96,7 @@ draughts,checkers,10x10,board game,strategy,AI,two player,offline,king,capture
 
 ### What's New
 
-A cleaner game screen: removed the top title and subtitle to give the board and controls more space.
+Optimized for iPhone Duo: the board and controls adapt to unfolding, folding, and screen orientation, staying clear of the fold area when partially open. A cleaner game screen gives you more space to play.
 
 ## Review Information
 
@@ -104,7 +104,7 @@ A cleaner game screen: removed the top title and subtitle to give the board and 
 - Demo account: Not applicable
 - Notes:
 
-This app does not require an account. Nearby two-player matches use Apple's local network and MultipeerConnectivity features. Reviewers can fully test the core game by playing against the built-in AI. To test nearby matches, run the app on two devices on the same local network, create a room on one device, then search and join from the other device. Version 1.4 removes the top title and subtitle from the game screen, giving the board and controls more space. Gameplay and nearby multiplayer are unchanged.
+This app does not require an account. Nearby two-player matches use Apple's local network and MultipeerConnectivity features. Reviewers can fully test the core game by playing against the built-in AI. To test nearby matches, run the app on two devices on the same local network, create a room on one device, then search and join from the other device. Version 1.4 removes the top title and subtitle from the game screen, giving the board and controls more space. Build 6 also adds iPhone Duo adaptive layout. Open, close, rotate, or partially fold the device during a game to see the board and controls adapt while preserving the game. In a partially folded posture, the board and controls occupy opposite sides of the fold. Gameplay and nearby multiplayer are unchanged.
 
 ## Privacy
 
@@ -137,6 +137,12 @@ This app does not require an account. Nearby two-player matches use Apple's loca
   - `AppStoreAssets/screenshots/ipad-13-03-ai-reply.png`
   - `AppStoreAssets/screenshots/ipad-13-04-new-game.png`
 
+- iPhone Duo (`IPHONE_DUO_PROFILE`), in both `zh-Hans` and `en-US`:
+  - `AppStoreAssets/screenshots/duo/<locale>/01-open.jpg` — inner display, 2853 × 2007
+  - `AppStoreAssets/screenshots/duo/<locale>/02-folded.jpg` — partially folded inner display, 2853 × 2007
+  - `AppStoreAssets/screenshots/duo/<locale>/03-cover.jpg` — outer display, 1398 × 2034
+  - Native simulator captures; JPEG without alpha. Uploaded through the App Asset Library API and placed in the Duo group for each localization.
+
 ## Submission Record — 1.3 (4)
 
 - Submitted: 2026-10-18T02:33:02.899Z
@@ -160,3 +166,19 @@ This app does not require an account. Nearby two-player matches use Apple's loca
 - Release type: `AFTER_APPROVAL`
 - Change commit: `1535113e3ac83e3adfa5e973a152653e08f8d88c`
 - Validation: Release simulator build installed and launched on iPhone 17; portrait gameplay/AI reply and landscape layout UI tests passed (2 tests); signed iOS archive verified and uploaded successfully.
+
+- Build 5 review withdrawn on 2026-10-20 to replace it with Duo-compatible build 6 and Duo screenshots.
+
+## Submission Record — 1.4 (6)
+
+- Submitted: 2026-10-20T15:02:24.332Z
+- App Store version ID: `485e0eb9-642c-44f6-8a25-c6afc61886e6`
+- Build ID: `4f057d1a-0181-4eb4-9fb2-33a5a7956464`
+- Review submission ID: `610ab774-097b-412e-9ac8-99f043175f28`
+- Build processing state at submission: `VALID`
+- Version and review submission state: `WAITING_FOR_REVIEW`
+- Release type: `AFTER_APPROVAL`
+- Duo adaptation commit: `b0e3a0ad81116b1e1e892ae0ca55efe4d04f065b`
+- Screenshots: three Duo images per localization (`zh-Hans`, `en-US`), processing verified and display order confirmed in `IPHONE_DUO_PROFILE`. Existing iPhone and iPad screenshots retained.
+- Validation: Duo Release tests passed (6 unit tests and 2 UI tests); open, partially folded, and cover-display layouts visually inspected; signed archive verified and uploaded successfully.
+- Scope of visual validation: portrait/landscape and fold transitions verified; system Split View was not entered during testing.
