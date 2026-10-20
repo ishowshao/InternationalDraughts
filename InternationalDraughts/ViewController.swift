@@ -3,8 +3,7 @@
 //  InternationalDraughts
 //
 //  Game screen: board + side panel. Ported from the web version (src/App.tsx).
-//  Layout adapts to orientation: portrait stacks the panel below the board,
-//  landscape places it to the right.
+//  Layout adapts to available space and active display folds.
 //
 //  Two game modes:
 //  - .ai   人机对战：player chooses a color, minimax AI plays the opposite color.
@@ -97,9 +96,8 @@ class ViewController: UIViewController {
     private let hostButton = UIButton(configuration: .bordered())
     private let joinButton = UIButton(configuration: .bordered())
 
-    private var portraitConstraints: [NSLayoutConstraint] = []
-    private var landscapeConstraints: [NSLayoutConstraint] = []
-    private var isLandscapeLayout: Bool?
+    private var boardPosition: [NSLayoutConstraint] = []
+    private var panelPosition: [NSLayoutConstraint] = []
 
     // MARK: - Lifecycle
 
@@ -125,11 +123,19 @@ class ViewController: UIViewController {
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        let landscape = view.bounds.width > view.bounds.height
-        guard landscape != isLandscapeLayout else { return }
-        isLandscapeLayout = landscape
-        NSLayoutConstraint.deactivate(landscape ? portraitConstraints : landscapeConstraints)
-        NSLayoutConstraint.activate(landscape ? landscapeConstraints : portraitConstraints)
+        let divisions: [CGRect]
+        if #available(iOS 27.1, *) {
+            divisions = view.reservedRegions(kind: .division).map(\.frame)
+        } else {
+            divisions = []
+        }
+        let layout = GameScreenLayout(safeArea: view.safeAreaLayoutGuide.layoutFrame,
+                                      divisions: divisions)
+        for (constraints, frame) in [(boardPosition, layout.board), (panelPosition, layout.panel)] {
+            for (constraint, value) in zip(constraints, [frame.minX, frame.minY, frame.width, frame.height]) {
+                if constraint.constant != value { constraint.constant = value }
+            }
+        }
     }
 
     // MARK: - View construction
@@ -302,56 +308,23 @@ class ViewController: UIViewController {
     }
 
     private func buildConstraints() {
-        let safe = view.safeAreaLayoutGuide
-
-        // Shared: panel stack fills the scroll view.
-        NSLayoutConstraint.activate([
+        panelScroll.accessibilityIdentifier = "gamePanel"
+        // Position the two containers independently; the panel's contents still use Auto Layout.
+        func position(_ child: UIView) -> [NSLayoutConstraint] {
+            [child.leftAnchor.constraint(equalTo: view.leftAnchor),
+             child.topAnchor.constraint(equalTo: view.topAnchor),
+             child.widthAnchor.constraint(equalToConstant: 0),
+             child.heightAnchor.constraint(equalToConstant: 0)]
+        }
+        boardPosition = position(boardView)
+        panelPosition = position(panelScroll)
+        NSLayoutConstraint.activate(boardPosition + panelPosition + [
             panelStack.topAnchor.constraint(equalTo: panelScroll.contentLayoutGuide.topAnchor, constant: 4),
             panelStack.bottomAnchor.constraint(equalTo: panelScroll.contentLayoutGuide.bottomAnchor, constant: -16),
             panelStack.leadingAnchor.constraint(equalTo: panelScroll.contentLayoutGuide.leadingAnchor),
             panelStack.trailingAnchor.constraint(equalTo: panelScroll.contentLayoutGuide.trailingAnchor),
             panelStack.widthAnchor.constraint(equalTo: panelScroll.frameLayoutGuide.widthAnchor),
-
-            boardView.widthAnchor.constraint(equalTo: boardView.heightAnchor),
         ])
-
-        // Portrait: board at the top, panel scrolls below it.
-        let portraitBoardWidth = boardView.widthAnchor.constraint(
-            equalTo: safe.widthAnchor, constant: -32)
-        portraitBoardWidth.priority = .defaultHigh
-        portraitConstraints = [
-            boardView.topAnchor.constraint(equalTo: safe.topAnchor, constant: 16),
-            boardView.centerXAnchor.constraint(equalTo: safe.centerXAnchor),
-            portraitBoardWidth,
-            boardView.widthAnchor.constraint(lessThanOrEqualToConstant: 560),
-            panelScroll.topAnchor.constraint(equalTo: boardView.bottomAnchor, constant: 16),
-            panelScroll.bottomAnchor.constraint(equalTo: safe.bottomAnchor),
-            panelScroll.leadingAnchor.constraint(equalTo: safe.leadingAnchor, constant: 16),
-            panelScroll.trailingAnchor.constraint(equalTo: safe.trailingAnchor, constant: -16),
-            panelScroll.widthAnchor.constraint(lessThanOrEqualToConstant: 560),
-        ]
-
-        // Landscape: panel on the right, board centered in the remaining space.
-        let boardArea = UILayoutGuide()
-        view.addLayoutGuide(boardArea)
-        let landscapeBoardHeight = boardView.heightAnchor.constraint(
-            equalTo: boardArea.heightAnchor)
-        landscapeBoardHeight.priority = .defaultHigh
-        landscapeConstraints = [
-            panelScroll.topAnchor.constraint(equalTo: safe.topAnchor, constant: 12),
-            panelScroll.bottomAnchor.constraint(equalTo: safe.bottomAnchor),
-            panelScroll.trailingAnchor.constraint(equalTo: safe.trailingAnchor, constant: -16),
-            panelScroll.widthAnchor.constraint(equalToConstant: 300),
-            boardArea.topAnchor.constraint(equalTo: safe.topAnchor, constant: 12),
-            boardArea.bottomAnchor.constraint(equalTo: safe.bottomAnchor, constant: -12),
-            boardArea.leadingAnchor.constraint(equalTo: safe.leadingAnchor, constant: 16),
-            boardArea.trailingAnchor.constraint(equalTo: panelScroll.leadingAnchor, constant: -16),
-            boardView.centerXAnchor.constraint(equalTo: boardArea.centerXAnchor),
-            boardView.centerYAnchor.constraint(equalTo: boardArea.centerYAnchor),
-            landscapeBoardHeight,
-            boardView.heightAnchor.constraint(lessThanOrEqualTo: boardArea.heightAnchor),
-            boardView.widthAnchor.constraint(lessThanOrEqualTo: boardArea.widthAnchor),
-        ]
     }
 
     // MARK: - Interaction
@@ -754,5 +727,59 @@ final class ChipView: UIView {
             )
         }
         ctx.restoreGState()
+    }
+}
+
+/// Geometry only: resizing never replaces the controller or changes the game state.
+struct GameScreenLayout {
+    let board: CGRect
+    let panel: CGRect
+
+    init(safeArea: CGRect, divisions: [CGRect] = []) {
+        let margin: CGFloat = 16
+        let gap: CGFloat = 16
+        let content = safeArea.insetBy(dx: min(margin, safeArea.width / 4),
+                                      dy: min(margin, safeArea.height / 4))
+        var boardArea = content
+        var panelArea = content
+        var divided = false
+        for region in divisions {
+            let fold = region.intersection(content)
+            guard !fold.isNull else { continue }
+            if fold.height > fold.width, fold.minX > content.minX, fold.maxX < content.maxX {
+                boardArea.size.width = max(0, fold.minX - gap / 2 - content.minX)
+                panelArea.origin.x = fold.maxX + gap / 2
+                panelArea.size.width = max(0, content.maxX - panelArea.minX)
+                divided = true
+            } else if fold.width >= fold.height, fold.minY > content.minY, fold.maxY < content.maxY {
+                boardArea.size.height = max(0, fold.minY - gap / 2 - content.minY)
+                panelArea.origin.y = fold.maxY + gap / 2
+                panelArea.size.height = max(0, content.maxY - panelArea.minY)
+                divided = true
+            }
+            if divided { break }
+        }
+        if !divided {
+            // Keep controls readable and prefer a large board over a narrow side column.
+            let sideBySide = content.width >= 520 &&
+                (content.width > content.height * 1.1 || content.width >= 760)
+            if sideBySide {
+                let panelWidth = min(320, max(240, content.width * 0.32))
+                boardArea.size.width = content.width - panelWidth - gap
+                panelArea.origin.x = content.maxX - panelWidth
+                panelArea.size.width = panelWidth
+            } else {
+                let side = min(content.width, 560, max(0, (content.height - gap) * 0.60))
+                boardArea.size.height = side
+                panelArea.origin.y = content.minY + side + gap
+                panelArea.size.height = max(0, content.maxY - panelArea.minY)
+            }
+        }
+        let side = max(0, min(boardArea.width, boardArea.height))
+        board = CGRect(x: boardArea.midX - side / 2, y: boardArea.midY - side / 2,
+                       width: side, height: side)
+        let panelWidth = min(560, panelArea.width)
+        panel = CGRect(x: panelArea.midX - panelWidth / 2, y: panelArea.minY,
+                       width: panelWidth, height: panelArea.height)
     }
 }

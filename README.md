@@ -9,12 +9,12 @@ An iOS implementation of International Draughts (10x10), written with UIKit and 
 - Choose White or Black against the AI, with easy, medium, and hard difficulty levels. Changing color starts a new game; White moves first.
 - Nearby two-player mode using local peer discovery, without an internet connection.
 - Rotated board for the Black player in nearby matches.
-- Portrait and landscape adaptive layout.
+- Adaptive layouts for narrow windows, wide screens, and iPhone Duo folds; the board stays square and controls remain scrollable.
 - UI tests for core gameplay, layout, and nearby-match automation hooks.
 
 ## Requirements
 
-- Xcode 26.6 or newer.
+- Xcode 27.1 or newer (iOS 27.1 SDK); deployment still supports iOS 17.6.
 - iOS 17.6 or newer.
 - A simulator or device capable of running the `InternationalDraughts` scheme.
 
@@ -94,12 +94,12 @@ The app uses `NSLocalNetworkUsageDescription` and Bonjour service declarations i
 - 人机对战可选择执白或执黑，支持简单、中等、困难三档难度；切换颜色开始新游戏，白方先行。
 - 附近双人对战，通过本地设备发现建立连接，无需互联网。
 - 附近对战中，执黑玩家看到旋转后的棋盘。
-- 支持竖屏和横屏自适应布局。
+- 支持窄窗口、宽屏和 iPhone Duo 折叠布局；棋盘保持正方形，操作面板可滚动。
 - 包含核心对局、布局和附近对战自动化钩子的 UI 测试。
 
 ## 运行要求
 
-- Xcode 26.6 或更新版本。
+- Xcode 27.1 或更新版本（iOS 27.1 SDK），最低运行系统仍为 iOS 17.6。
 - iOS 17.6 或更新版本。
 - 可运行 `InternationalDraughts` scheme 的模拟器或真机。
 
