@@ -104,7 +104,7 @@ A cleaner game screen: removed the top title and subtitle to give the board and 
 - Demo account: Not applicable
 - Notes:
 
-This app does not require an account. Nearby two-player matches use Apple's local network and MultipeerConnectivity features. Reviewers can fully test the core game by playing against the built-in AI. To test nearby matches, run the app on two devices on the same local network, create a room on one device, then search and join from the other device. In version 1.3, the color selector below the scoreboard lets players choose White or Black against the computer. Selecting Black starts a new game, rotates the board, and lets the computer play White first. Changing colors restarts the game.
+This app does not require an account. Nearby two-player matches use Apple's local network and MultipeerConnectivity features. Reviewers can fully test the core game by playing against the built-in AI. To test nearby matches, run the app on two devices on the same local network, create a room on one device, then search and join from the other device. Version 1.4 removes the top title and subtitle from the game screen, giving the board and controls more space. Gameplay and nearby multiplayer are unchanged.
 
 ## Privacy
 
@@ -148,3 +148,15 @@ This app does not require an account. Nearby two-player matches use Apple's loca
 - Release type: `AFTER_APPROVAL`
 - Feature commit: `4d1f4ee603a6b2d54829df7dbf6a39a7f92e52e7`
 - Validation: Release simulator tests passed (3 engine tests and 3 UI tests); signed iOS archive verified and uploaded successfully.
+
+## Submission Record — 1.4 (5)
+
+- Submitted: 2026-10-20T02:03:11.041Z
+- App Store version ID: `485e0eb9-642c-44f6-8a25-c6afc61886e6`
+- Build ID: `f3af8b44-4f2a-4b62-9ccd-9cc1a870b780`
+- Review submission ID: `90e774f6-e33e-4fe2-be01-6757f9259def`
+- Build processing state at submission: `VALID`
+- Version and review submission state: `WAITING_FOR_REVIEW`
+- Release type: `AFTER_APPROVAL`
+- Change commit: `1535113e3ac83e3adfa5e973a152653e08f8d88c`
+- Validation: Release simulator build installed and launched on iPhone 17; portrait gameplay/AI reply and landscape layout UI tests passed (2 tests); signed iOS archive verified and uploaded successfully.
