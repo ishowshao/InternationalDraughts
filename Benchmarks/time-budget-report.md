@@ -57,4 +57,3 @@ CANDIDATE_SECONDS=1.0 OPPONENT=advanced OPPONENT_SECONDS=0.3 \
 本次仅修改对战工具、保存数据和报告，App 算法及默认参数未改变。优化编译、基准自检和全部对局逐步合法性断言通过；未重跑 iOS 单元测试，也未测 iPhone 真机耗时。
 
 完整数据：[results-1000ms-vs-300ms.jsonl](results-1000ms-vs-300ms.jsonl)。本次源码及结果哈希：[metadata-time-budget.json](metadata-time-budget.json)。
-

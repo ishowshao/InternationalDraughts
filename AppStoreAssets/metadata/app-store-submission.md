@@ -121,6 +121,8 @@ This app does not require an account. Nearby two-player matches use Apple's loca
 - Loot boxes or in-app purchases: No
 - Advertising: No
 - User-generated content: No
+- Social media: No
+- Age-restricted social media: No
 - Unrestricted web access: No
 - Suggested age rating outcome: 4+
 
@@ -172,3 +174,18 @@ Both `zh-Hans` and `en-US` use native simulator screenshots showing Master selec
 - Screenshots: three Duo images per localization (`zh-Hans`, `en-US`), processing verified and display order confirmed in `IPHONE_DUO_PROFILE`. Existing iPhone and iPad screenshots retained.
 - Validation: Duo Release tests passed (6 unit tests and 2 UI tests); open, partially folded, and cover-display layouts visually inspected; signed archive verified and uploaded successfully.
 - Scope of visual validation: portrait/landscape and fold transitions verified; system Split View was not entered during testing.
+
+## Submission Record — 1.5 (7)
+
+- Submitted: 2026-10-30T14:55:58.878Z
+- App Store version ID: `8c210b72-4c22-4fa3-8e46-e0d4a29ec31d`
+- Build ID: `932f6f25-fd6f-4da0-9714-84fdbcfdb0ed`
+- Review submission ID: `639342f7-0cff-4c47-b371-c892eceed33b`
+- Build processing state at submission: `VALID`
+- Version and review submission state: `WAITING_FOR_REVIEW`
+- Release type: `AFTER_APPROVAL`
+- Feature and release-assets commit: `9cb73ae`
+- Hard uses AdvancedAI; the new Master level uses StrongAI and the bundled learned pattern evaluator.
+- Screenshots: two native screenshots per device group (iPhone, iPad, Duo cover) and localization (`zh-Hans`, `en-US`), 12 total; all processed successfully.
+- Validation: 13 Release unit tests passed; the bilingual Master selection/AI-reply UI test passed on iPhone 17 Pro Max, iPad Pro 13-inch (M5), and iPhone Duo. Signed archive and bundled model verified; upload succeeded.
+- Updated the new social-media age-rating fields to false to match the app's functionality.
