@@ -171,6 +171,12 @@
         "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "對戰邀請" } }
       }
     },
+    "Master" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "大师" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "大師" } }
+      }
+    },
     "Medium" : {
       "localizations" : {
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "中等" } },

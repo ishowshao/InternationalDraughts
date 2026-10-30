@@ -45,12 +45,14 @@ enum Difficulty: Int, CaseIterable {
     case easy
     case medium
     case hard
+    case master
 
     var searchDepth: Int {
         switch self {
         case .easy: return 2
         case .medium: return 4
         case .hard: return 6
+        case .master: return 32
         }
     }
 
@@ -59,6 +61,7 @@ enum Difficulty: Int, CaseIterable {
         case .easy: return String(localized: "Easy")
         case .medium: return String(localized: "Medium")
         case .hard: return String(localized: "Hard")
+        case .master: return String(localized: "Master")
         }
     }
 }
@@ -296,6 +299,12 @@ enum Engine {
 
     /// Choose the AI's move for the requested color. Returns nil if no move is available.
     static func chooseAIMove(board: Board, difficulty: Difficulty, color: PieceColor = .black) -> Move? {
+        if difficulty == .hard {
+            return AdvancedAI.chooseMove(board: board, color: color).move
+        }
+        if difficulty == .master {
+            return StrongAI.chooseMove(board: board, color: color).move
+        }
         let moves = legalMoves(board: board, color: color)
         if moves.isEmpty { return nil }
         if moves.count == 1 { return moves[0] }

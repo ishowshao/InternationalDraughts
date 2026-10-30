@@ -5,8 +5,8 @@
 - Platform: iOS
 - Bundle ID: `com.shshaoxia.InternationalDraughts`
 - SKU: `com.shshaoxia.InternationalDraughts`
-- Version: `1.4`
-- Build: `6`
+- Version: `1.5`
+- Build: `7`
 - Release: Automatic after approval
 - Primary locale: Simplified Chinese
 - Category: Games
@@ -38,7 +38,7 @@
 
 国际跳棋10x10 AI附近对战是一款专注标准国际跳棋规则的 iPhone 和 iPad 应用。
 
-应用支持完整的 10x10 棋盘、强制吃子、最大吃子数优先、连续跳吃、王棋长距离移动和升王规则。你可以随时与内置 AI 进行练习，并在简单、中等、困难三档难度之间切换。
+应用支持完整的 10x10 棋盘、强制吃子、最大吃子数优先、连续跳吃、王棋长距离移动和升王规则。你可以随时与内置 AI 进行练习，并在简单、中等、困难、大师四档难度之间切换。
 
 如果身边有另一台设备，还可以通过附近对战创建或搜索房间，直接进行本地双人对局。附近对战不需要互联网账号，也不会把对局发送到服务器。
 
@@ -46,7 +46,7 @@
 
 - 10x10 国际跳棋棋盘
 - 标准吃子、连跳、飞王和升王规则
-- 三档 AI 难度
+- 四档 AI 难度，包含更强的大师挑战
 - 附近双人对战
 - iPhone 和 iPad 自适应布局
 - 无广告、无账号、无数据收集
@@ -57,7 +57,7 @@
 
 ### What's New
 
-适配 iPhone Duo，棋盘与操作面板随展开、折叠和屏幕方向自动调整，半折叠时避开折弯区域。简化顶部界面，为对局留出更多空间。
+新增“大师”难度，采用学习得到的棋形评估与更高效的搜索，带来更有挑战性的对局。增强“困难”AI，保留简单和中等难度，四档难度满足不同练习需求。所有 AI 均可离线运行。
 
 ## English (U.S.) Store Listing
 
@@ -77,7 +77,7 @@ Play a classic 10x10 match anytime, practice against the built-in AI, or challen
 
 Enjoy International Draughts on a complete 10x10 board, designed for both iPhone and iPad.
 
-The app supports mandatory captures, maximum-capture priority, multi-jump sequences, flying kings, and promotion. Practice whenever you like against the built-in AI, with Easy, Medium, and Hard difficulty levels.
+The app supports mandatory captures, maximum-capture priority, multi-jump sequences, flying kings, and promotion. Practice whenever you like against the built-in AI, with Easy, Medium, Hard, and Master difficulty levels.
 
 When another device is nearby, create or find a room for a local two-player match. Nearby matches require no internet account, and game data is never sent to a server.
 
@@ -85,7 +85,7 @@ Key features:
 
 - Full 10x10 International Draughts board
 - Standard captures, multi-jumps, flying kings, and promotion
-- Three AI difficulty levels
+- Four AI difficulty levels, including the stronger Master challenge
 - Nearby two-player matches
 - Adaptive iPhone and iPad layouts
 - No ads, no account, and no data collection
@@ -96,7 +96,7 @@ draughts,checkers,10x10,board game,strategy,AI,two player,offline,king,capture
 
 ### What's New
 
-Optimized for iPhone Duo: the board and controls adapt to unfolding, folding, and screen orientation, staying clear of the fold area when partially open. A cleaner game screen gives you more space to play.
+Introducing Master difficulty, with a learned position evaluator and more efficient search for a stronger challenge. Hard difficulty also gains an improved AI, while Easy and Medium remain available. All four levels work offline.
 
 ## Review Information
 
@@ -104,7 +104,7 @@ Optimized for iPhone Duo: the board and controls adapt to unfolding, folding, an
 - Demo account: Not applicable
 - Notes:
 
-This app does not require an account. Nearby two-player matches use Apple's local network and MultipeerConnectivity features. Reviewers can fully test the core game by playing against the built-in AI. To test nearby matches, run the app on two devices on the same local network, create a room on one device, then search and join from the other device. Version 1.4 removes the top title and subtitle from the game screen, giving the board and controls more space. Build 6 also adds iPhone Duo adaptive layout. Open, close, rotate, or partially fold the device during a game to see the board and controls adapt while preserving the game. In a partially folded posture, the board and controls occupy opposite sides of the fold. Gameplay and nearby multiplayer are unchanged.
+This app does not require an account. Nearby two-player matches use Apple's local network and MultipeerConnectivity features. Reviewers can fully test the core game by playing against the built-in AI. To test nearby matches, run the app on two devices on the same local network, create a room on one device, then search and join from the other device. Version 1.5 adds Master difficulty and improves Hard difficulty. Select Master in the Difficulty control to try the strongest AI. All AI evaluation runs locally, including the bundled pattern tables; no account, network connection, model download, or third-party AI service is required. Nearby multiplayer remains unchanged.
 
 ## Privacy
 
@@ -124,24 +124,14 @@ This app does not require an account. Nearby two-player matches use Apple's loca
 - Unrestricted web access: No
 - Suggested age rating outcome: 4+
 
-## Screenshots
+## Screenshots — 1.5
 
-- iPhone 6.9-inch:
-  - `AppStoreAssets/screenshots/iphone-6.9-01-home.png`
-  - `AppStoreAssets/screenshots/iphone-6.9-02-selected-move.png`
-  - `AppStoreAssets/screenshots/iphone-6.9-03-ai-reply.png`
-  - `AppStoreAssets/screenshots/iphone-6.9-04-new-game.png`
-- iPad 13-inch:
-  - `AppStoreAssets/screenshots/ipad-13-01-home.png`
-  - `AppStoreAssets/screenshots/ipad-13-02-selected-move.png`
-  - `AppStoreAssets/screenshots/ipad-13-03-ai-reply.png`
-  - `AppStoreAssets/screenshots/ipad-13-04-new-game.png`
+Both `zh-Hans` and `en-US` use native simulator screenshots showing Master selected, followed by an actual AI reply:
 
-- iPhone Duo (`IPHONE_DUO_PROFILE`), in both `zh-Hans` and `en-US`:
-  - `AppStoreAssets/screenshots/duo/<locale>/01-open.jpg` — inner display, 2853 × 2007
-  - `AppStoreAssets/screenshots/duo/<locale>/02-folded.jpg` — partially folded inner display, 2853 × 2007
-  - `AppStoreAssets/screenshots/duo/<locale>/03-cover.jpg` — outer display, 1398 × 2034
-  - Native simulator captures; JPEG without alpha. Uploaded through the App Asset Library API and placed in the Duo group for each localization.
+- `AppStoreAssets/screenshots/1.5/<locale>/iphone-{home,reply}.jpg` — 1320 × 2868, `IPHONE_DYNAMIC_ISLAND_LARGE_PROFILE`.
+- `AppStoreAssets/screenshots/1.5/<locale>/ipad-{home,reply}.jpg` — 2064 × 2752, `IPAD_13_PROFILE`.
+- `AppStoreAssets/screenshots/1.5/<locale>/duo-{home,reply}.jpg` — cover display, 1398 × 2034, `IPHONE_DUO_PROFILE`.
+- JPEG without alpha; no simulated or composited gameplay. Replaces the inherited screenshots for version 1.5 only. Historical assets remain in the repository.
 
 ## Submission Record — 1.3 (4)
 

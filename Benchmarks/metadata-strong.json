@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-30",
+  "candidate": "StrongAI learned pattern evaluation",
+  "baseline": "unchanged uncommitted AdvancedAI",
+  "secondsPerMove": 0.3,
+  "candidateMaxDepth": 32,
+  "opponentMaxDepth": 12,
+  "build": "swiftc -O",
+  "model": "Mac15,8",
+  "cpu": "Apple M3 Max",
+  "logicalCPUs": 16,
+  "parallelMatchProcesses": 3,
+  "holdout": [
+    {
+      "startPair": 1100,
+      "pairs": 6,
+      "openingPlies": 6
+    },
+    {
+      "startPair": 1200,
+      "pairs": 6,
+      "openingPlies": 12
+    },
+    {
+      "startPair": 1300,
+      "pairs": 6,
+      "openingPlies": 20
+    }
+  ],
+  "sha256": {
+    "InternationalDraughts/StrongAI.swift": "ff9795015e7d1764fb4585634a919edaee4c4003c882de1c6159bf37b3e5d137",
+    "InternationalDraughts/AdvancedAI.swift": "d35d2525a5e7945c1ac7254ee373c3eb59991ad3cbe0af48df1948f3ebfced8f",
+    "InternationalDraughts/Engine.swift": "49a3bf67ded7b0e12b3f41bc62765b72f357672128bb42d8381f1a8fc076fceb",
+    "Benchmarks/main.swift": "41f9a91466d8791739181648a3aadf09bb696da905e5e2bb83f91fe6bfedb686",
+    "InternationalDraughts/PatternEvaluation.swift": "0ebfc3fecdc447db231f6dc0aadf718c485c48f5926964b645f0de137f393380",
+    "InternationalDraughts/DraughtsPatterns.bin": "30f23c8c9a9585d6b6f93ad549367ba6a43423b629bcef566e54e3da6c45b48b",
+    "Benchmarks/summarize_strong.py": "0668d3d16926ffbd01f645bebd538f575dc06a93994d8ee806c51a42603bcccb"
+  },
+  "baselineUnchangedSHA256": "d35d2525a5e7945c1ac7254ee373c3eb59991ad3cbe0af48df1948f3ebfced8f",
+  "experiments": {
+    "v1": {
+      "sha256": "1b9bfcc2049e633412d1a8a78cb9aa96c285f603584efafeb87d11bac897936d",
+      "description": "phase-aware handcrafted evaluation; rejected after 24 games scored 56.25 percent raw and 52.08 percent conservative"
+    },
+    "v2": {
+      "sha256": "eda2a1645d83495e528aa97603d76d2d392dea937a81f92201560e9cdcf51989",
+      "description": "restore AdvancedAI evaluation at exact integer scale, 12 development games at 100 ms"
+    },
+    "v3": {
+      "description": "add forced-reply extensions; freeze before final seeds 600,700,800 series",
+      "sha256": "c670bb4a9d581736cbfb44df84ee6b0192415cf495a9a4744c2684fa54bf358c",
+      "result": "24 games: 15 wins, 4 draws, 5 losses; conservative score 66.67%"
+    }
+  },
+  "training": {
+    "teacher": "Scan 3.1",
+    "teacherCommit": "7aae17e7b7bfc47744601afb1ee7655e18983ce5",
+    "python": "3.14.0",
+    "numpy": "2.4.2",
+    "scipy": "1.17.0",
+    "details": "training/model-metadata.json"
+  },
+  "verification": {
+    "differentialPositions": 6500,
+    "exhaustiveReferenceTrials": 24,
+    "simulator": "iPhone 17 / iOS 26.2",
+    "configuration": "Release, ENABLE_TESTABILITY=YES",
+    "unitTestsPassed": 13,
+    "installedAndLaunched": true
+  },
+  "result": {
+    "games": 36,
+    "raw": {
+      "win": 26,
+      "draw": 6,
+      "loss": 4
+    },
+    "conservative": {
+      "win": 24,
+      "draw": 8,
+      "loss": 4
+    },
+    "scorePercent": 80.55555555555556,
+    "conservativeScorePercent": 77.77777777777777,
+    "byColor": {
+      "white": {
+        "win": 13,
+        "draw": 2,
+        "loss": 3
+      },
+      "black": {
+        "win": 13,
+        "draw": 4,
+        "loss": 1
+      }
+    }
+  }
+}

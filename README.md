@@ -6,7 +6,8 @@ An iOS implementation of International Draughts (10x10), written with UIKit and 
 
 - 10x10 International Draughts board with playable-square coordinates.
 - Standard move generation with mandatory captures, maximum-capture selection, multi-jump sequences, flying kings, and promotion.
-- Choose White or Black against the AI, with easy, medium, and hard difficulty levels. Changing color starts a new game; White moves first.
+- Choose White or Black against the AI, with easy, medium, hard, and master difficulty levels. Changing color starts a new game; White moves first.
+- Hard uses AdvancedAI (300 ms target budget, up to 12 plies). Master uses the StrongAI bitboard engine: iterative-deepening principal-variation search, forced-reply extensions, capture quiescence, history/killer ordering, verified late-move reductions, and a locally trained pattern evaluator (300 ms target budget, up to 32 decision plies). Easy and Medium retain the original engine.
 - Nearby two-player mode using local peer discovery, without an internet connection.
 - Rotated board for the Black player in nearby matches.
 - Adaptive layouts for narrow windows, wide screens, and iPhone Duo folds; the board stays square and controls remain scrollable.
@@ -71,7 +72,8 @@ Those tests use launch arguments (`-mpAutoHost` and `-mpAutoJoin`) to create and
 
 ## Project Layout
 
-- `InternationalDraughts/Engine.swift`: rules engine, legal move generation, board updates, and AI search.
+- `InternationalDraughts/Engine.swift`: rules engine, legal move generation, board updates, and AI routing.
+- `InternationalDraughts/StrongAI.swift`: optimized master-mode search; `AdvancedAI.swift` powers Hard.
 - `InternationalDraughts/BoardView.swift`: board rendering and tap-to-square mapping.
 - `InternationalDraughts/ViewController.swift`: main game UI, AI mode, nearby-match flow, and game state.
 - `InternationalDraughts/MultipeerService.swift`: local peer discovery, connection lifecycle, and JSON message transport.
@@ -91,7 +93,8 @@ The app uses `NSLocalNetworkUsageDescription` and Bonjour service declarations i
 
 - 10x10 国际跳棋棋盘，并显示可行棋格的坐标。
 - 标准走法生成：强制吃子、最大吃子数优先、连续跳吃、王棋长距离移动和升王。
-- 人机对战可选择执白或执黑，支持简单、中等、困难三档难度；切换颜色开始新游戏，白方先行。
+- 人机对战可选择执白或执黑，支持简单、中等、困难、大师四档难度；切换颜色开始新游戏，白方先行。
+- 困难模式使用 AdvancedAI（目标预算 300 毫秒，最多 12 层）。大师模式采用 StrongAI 位棋盘引擎：迭代加深主变搜索、强制应招延伸、吃子静态搜索、历史与杀手走法排序、带复核的迟着缩减和本地训练的棋形评估；目标预算 300 毫秒，最多 32 个决策层。简单和中等保留原引擎。
 - 附近双人对战，通过本地设备发现建立连接，无需互联网。
 - 附近对战中，执黑玩家看到旋转后的棋盘。
 - 支持窄窗口、宽屏和 iPhone Duo 折叠布局；棋盘保持正方形，操作面板可滚动。
@@ -165,3 +168,7 @@ xcodebuild \
 ## 说明
 
 应用在 `Info.plist` 中声明了 `NSLocalNetworkUsageDescription` 和 Bonjour 服务，用于本地设备发现。Bonjour 服务类型是 `_intl-draughts._tcp` / `_intl-draughts._udp`，与 `MultipeerService.serviceType` 保持一致。
+
+## AI benchmark / AI 对战测试
+
+See [Benchmarks/README.md](Benchmarks/README.md) for the original experiments, and [StrongAI report](Benchmarks/strong-ai-report.md) for the new algorithm, comparisons against the uncommitted AdvancedAI, reproducible commands, and adjudication limits.

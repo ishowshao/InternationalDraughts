@@ -1,0 +1,294 @@
+{
+  "games": 36,
+  "raw": {
+    "win": 26,
+    "draw": 6,
+    "loss": 4
+  },
+  "conservative": {
+    "win": 24,
+    "draw": 8,
+    "loss": 4
+  },
+  "scorePercent": 80.55555555555556,
+  "conservativeScorePercent": 77.77777777777777,
+  "specialEndingGames": 7,
+  "strong": {
+    "meanMilliseconds": 217.39511012002043,
+    "maxMilliseconds": 311.398917,
+    "medianNonforcedDepth": 9,
+    "nodesPerSecond": 1933683.5642111574
+  },
+  "opponent": {
+    "meanMilliseconds": 222.17666413463516,
+    "maxMilliseconds": 310.372042,
+    "medianNonforcedDepth": 9,
+    "nodesPerSecond": 445867.66771577887
+  },
+  "byColor": {
+    "white": {
+      "win": 13,
+      "draw": 2,
+      "loss": 3
+    },
+    "black": {
+      "win": 13,
+      "draw": 4,
+      "loss": 1
+    }
+  },
+  "details": [
+    {
+      "opening": 1100,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1100,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1101,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1101,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1102,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1102,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1103,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1103,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1104,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1104,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "draw",
+      "specialEnding": true
+    },
+    {
+      "opening": 1105,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1105,
+      "color": "black",
+      "outcome": "draw",
+      "conservative": "draw",
+      "specialEnding": true
+    },
+    {
+      "opening": 1200,
+      "color": "white",
+      "outcome": "draw",
+      "conservative": "draw",
+      "specialEnding": true
+    },
+    {
+      "opening": 1200,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1201,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1201,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1202,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1202,
+      "color": "black",
+      "outcome": "draw",
+      "conservative": "draw",
+      "specialEnding": true
+    },
+    {
+      "opening": 1203,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1203,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1204,
+      "color": "white",
+      "outcome": "draw",
+      "conservative": "draw",
+      "specialEnding": false
+    },
+    {
+      "opening": 1204,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1205,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1205,
+      "color": "black",
+      "outcome": "loss",
+      "conservative": "loss",
+      "specialEnding": true
+    },
+    {
+      "opening": 1300,
+      "color": "white",
+      "outcome": "loss",
+      "conservative": "loss",
+      "specialEnding": false
+    },
+    {
+      "opening": 1300,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1301,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1301,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "draw",
+      "specialEnding": true
+    },
+    {
+      "opening": 1302,
+      "color": "white",
+      "outcome": "loss",
+      "conservative": "loss",
+      "specialEnding": false
+    },
+    {
+      "opening": 1302,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1303,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1303,
+      "color": "black",
+      "outcome": "draw",
+      "conservative": "draw",
+      "specialEnding": true
+    },
+    {
+      "opening": 1304,
+      "color": "white",
+      "outcome": "loss",
+      "conservative": "loss",
+      "specialEnding": false
+    },
+    {
+      "opening": 1304,
+      "color": "black",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1305,
+      "color": "white",
+      "outcome": "win",
+      "conservative": "win",
+      "specialEnding": false
+    },
+    {
+      "opening": 1305,
+      "color": "black",
+      "outcome": "draw",
+      "conservative": "draw",
+      "specialEnding": false
+    }
+  ]
+}

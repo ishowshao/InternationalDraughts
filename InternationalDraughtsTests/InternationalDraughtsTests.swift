@@ -27,6 +27,37 @@ struct InternationalDraughtsTests {
         }
     }
 
+    @Test func advancedAISeesRecaptureBeyondNominalDepth() throws {
+        // At depth one the old evaluator prefers the central square, overlooking
+        // the opponent's compulsory capture. Quiescence must see that capture.
+        for color in [PieceColor.black, .white] {
+            var board: Board = Array(repeating: nil, count: 100)
+            board[color == .black ? 32 : 67] = Piece(color: color, king: false)
+            board[color == .black ? 54 : 45] = Piece(color: color.opponent, king: false)
+            let result = AdvancedAI.chooseMove(board: board, color: color, maxDepth: 1, timeLimit: nil)
+            let move = try #require(result.move)
+            #expect(move.to == (color == .black ? 41 : 58))
+            #expect(result.completedDepth == 1)
+        }
+    }
+
+    @Test func advancedAITimeoutKeepsLegalFallback() throws {
+        let board = Engine.initialBoard()
+        let result = AdvancedAI.chooseMove(board: board, color: .white, timeLimit: 0)
+        let move = try #require(result.move)
+        #expect(result.completedDepth == 0)
+        #expect(Engine.legalMoves(board: board, color: .white).contains { $0.path == move.path })
+    }
+
+    @Test func advancedAIHandlesForcedMoveAndTerminalPosition() throws {
+        var board: Board = Array(repeating: nil, count: 100)
+        #expect(AdvancedAI.chooseMove(board: board, color: .black).move == nil)
+        board[80] = Piece(color: .black, king: false)
+        let move = try #require(AdvancedAI.chooseMove(board: board, color: .black).move)
+        #expect(move.to == 91)
+        #expect(Engine.applyMove(board: board, move: move)[91]?.king == true)
+    }
+
     @Test func aiReturnsNilWithoutLegalMoves() {
         let board: Board = Array(repeating: nil, count: 100)
         for color in [PieceColor.white, .black] {

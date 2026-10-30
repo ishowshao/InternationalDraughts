@@ -245,6 +245,29 @@ final class InternationalDraughtsUITests: XCTestCase {
         XCTAssertEqual(app.staticTexts["status"].label, "Your turn (White)")
     }
 
+    func testMasterReleaseScreenshots() throws {
+        XCUIDevice.shared.orientation = .portrait
+        for language in ["zh-Hans", "en"] {
+            let app = makeApp(language: language)
+            app.launch()
+            let board = app.otherElements["board"]
+            XCTAssertTrue(board.waitForExistence(timeout: 10))
+            let master = app.buttons[language == "en" ? "Master" : "大师"]
+            let hard = app.buttons[language == "en" ? "Hard" : "困难"]
+            XCTAssertTrue(hard.exists)
+            master.tap()
+            XCTAssertTrue(master.isSelected)
+            attach(app, "\(language)-master-home")
+            let initial = board.value as? String ?? ""
+            tapCell(board, 6, 3)
+            tapCell(board, 5, 4)
+            let replied = NSPredicate(format: "value != %@ AND value BEGINSWITH %@", initial, "turn:w last:")
+            wait(for: [expectation(for: replied, evaluatedWith: board)], timeout: 15)
+            attach(app, "\(language)-master-reply")
+            app.terminate()
+        }
+    }
+
     func testEnglishStoreScreenshots() throws {
         XCUIDevice.shared.orientation = .portrait
         let app = makeApp(language: "en")

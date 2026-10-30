@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-30",
+  "baselineCommit": "ab52b568735119913f52775f94cb240a3fdd8bc5",
+  "hardware": "Apple M3 Max",
+  "os": "macOS 27.0.1",
+  "compiler": "Apple Swift 6.4",
+  "optimization": "-O",
+  "pairsPerGroup": 6,
+  "timeBudgetSeconds": 0.3,
+  "maxTimedDepth": 12,
+  "fixedDepth": 6,
+  "sha256": {
+    "InternationalDraughts/Engine.swift": "ff2b78c10a63521d5a21141eddf1dad2c4dff53103e0cc33bfaea63d63a548bf",
+    "InternationalDraughts/AdvancedAI.swift": "d35d2525a5e7945c1ac7254ee373c3eb59991ad3cbe0af48df1948f3ebfced8f",
+    "Benchmarks/LegacyEngine.swift": "6212e8fa499d3e329e669db89fa56f2f55734dd6285270cc9d90df2e09934797",
+    "Benchmarks/main.swift": "0dc815c5ee3a98e5151dd77ed83402ce98be366c4be2444f6907b313aece004f",
+    "Benchmarks/results-timed.jsonl": "0c1af2596903af6465acf7401d16c27086e16b1812442aa227809d33f831105e",
+    "Benchmarks/results-fixed.jsonl": "2dfec8ba7dc098e6e1b6ee24f1fa2ee6d3a0e2fb4110b1bb59b5de177080be98"
+  }
+}
