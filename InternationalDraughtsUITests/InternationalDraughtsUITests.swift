@@ -47,6 +47,20 @@ final class InternationalDraughtsUITests: XCTestCase {
         add(attachment)
     }
 
+    func testRatingEntryIsLocalizedAndReachable() throws {
+        for (language, title) in [("zh-Hans", "给我们评分"), ("en", "Rate this app"), ("zh-Hant", "給我們評分")] {
+            let app = makeApp(language: language)
+            app.launch()
+            let button = app.buttons["rateApp"]
+            XCTAssertTrue(button.waitForExistence(timeout: 5))
+            for _ in 0..<5 where !button.isHittable { app.scrollViews.firstMatch.swipeUp() }
+            XCTAssertTrue(button.isHittable)
+            XCTAssertEqual(button.label, title)
+            attach(app, "rating-entry-\(language)")
+            app.terminate()
+        }
+    }
+
     // MARK: - Nearby match (MultipeerConnectivity, two simulators)
     // Run testNearbyMatchHost on one simulator and testNearbyMatchJoin on
     // another at the same time; they connect and play one move each.

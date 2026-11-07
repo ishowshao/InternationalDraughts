@@ -5,8 +5,8 @@
 - Platform: iOS
 - Bundle ID: `com.shshaoxia.InternationalDraughts`
 - SKU: `com.shshaoxia.InternationalDraughts`
-- Version: `1.5`
-- Build: `7`
+- Version: `1.6`
+- Build: `8`
 - Release: Automatic after approval
 - Primary locale: Simplified Chinese
 - Category: Games
@@ -57,7 +57,7 @@
 
 ### What's New
 
-新增“大师”难度，采用学习得到的棋形评估与更高效的搜索，带来更有挑战性的对局。增强“困难”AI，保留简单和中等难度，四档难度满足不同练习需求。所有 AI 均可离线运行。
+新增“给我们评分”入口，方便前往 App Store 分享评价。在完成多局游戏后，适时邀请评分，避免打断对局。
 
 ## English (U.S.) Store Listing
 
@@ -96,7 +96,7 @@ draughts,checkers,10x10,board game,strategy,AI,two player,offline,king,capture
 
 ### What's New
 
-Introducing Master difficulty, with a learned position evaluator and more efficient search for a stronger challenge. Hard difficulty also gains an improved AI, while Easy and Medium remain available. All four levels work offline.
+Added a convenient Rate This App link to share your review on the App Store. Occasional rating requests appear after completed games, without interrupting play.
 
 ## Review Information
 
@@ -104,7 +104,7 @@ Introducing Master difficulty, with a learned position evaluator and more effici
 - Demo account: Not applicable
 - Notes:
 
-This app does not require an account. Nearby two-player matches use Apple's local network and MultipeerConnectivity features. Reviewers can fully test the core game by playing against the built-in AI. To test nearby matches, run the app on two devices on the same local network, create a room on one device, then search and join from the other device. Version 1.5 adds Master difficulty and improves Hard difficulty. Select Master in the Difficulty control to try the strongest AI. All AI evaluation runs locally, including the bundled pattern tables; no account, network connection, model download, or third-party AI service is required. Nearby multiplayer remains unchanged.
+This app does not require an account. Nearby two-player matches use Apple's local network and MultipeerConnectivity features. Reviewers can fully test the core game by playing against the built-in AI. To test nearby matches, run the app on two devices on the same local network, create a room on one device, then search and join from the other device. Version 1.6 adds a Rate This App link below the rules and the native StoreKit rating request after three completed games, regardless of outcome. Requests are limited to once per app version and at least 120 days apart; actual presentation is controlled by StoreKit. Gameplay and AI are unchanged from version 1.5. All AI evaluation runs locally, including the bundled pattern tables; no account, network connection, model download, or third-party AI service is required. Nearby multiplayer remains unchanged.
 
 ## Privacy
 

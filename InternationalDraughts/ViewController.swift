@@ -14,6 +14,7 @@
 import AudioToolbox
 import MultipeerConnectivity
 import UIKit
+import StoreKit
 
 class ViewController: UIViewController {
 
@@ -26,6 +27,8 @@ class ViewController: UIViewController {
 
     private var board: Board = Engine.initialBoard()
     private var turn: PieceColor = .white
+    private let reviewPrompt = ReviewPromptPolicy()
+    private var gameID = UUID()
     private var status: GameStatus = .playing
     private var difficulty: Difficulty = .medium
 
@@ -183,6 +186,15 @@ class ViewController: UIViewController {
         panelStack.addArrangedSubview(peerCard())
         panelStack.addArrangedSubview(newGameButton)
         panelStack.addArrangedSubview(rulesCard())
+        var reviewConfig = UIButton.Configuration.plain()
+        reviewConfig.title = String(localized: "Rate this app")
+        reviewConfig.image = UIImage(systemName: "star")
+        reviewConfig.imagePadding = 8
+        reviewConfig.baseForegroundColor = .accent
+        let reviewButton = UIButton(configuration: reviewConfig)
+        reviewButton.accessibilityIdentifier = "rateApp"
+        reviewButton.addTarget(self, action: #selector(rateAppTapped), for: .touchUpInside)
+        panelStack.addArrangedSubview(reviewButton)
 
         for v in [boardView, panelScroll, panelStack] {
             v.translatesAutoresizingMaskIntoConstraints = false
@@ -371,7 +383,7 @@ class ViewController: UIViewController {
     }
 
     private func commit(_ move: Move) {
-        guard let mover = board[move.from]?.color else { return }
+        guard status == .playing, let mover = board[move.from]?.color else { return }
         let next = Engine.applyMove(board: board, move: move)
         let nextTurn = mover.opponent
 
@@ -385,6 +397,10 @@ class ViewController: UIViewController {
         }
         turn = nextTurn
         updateUI()
+        if status != .playing {
+            reviewPrompt.recordCompletedGame()
+            scheduleReviewIfEligible()
+        }
 
         switch mode {
         case .ai:
@@ -440,7 +456,32 @@ class ViewController: UIViewController {
         resetBoard()
     }
 
+    @objc private func rateAppTapped() {
+        UIApplication.shared.open(ReviewPromptPolicy.reviewURL)
+    }
+
+    private func scheduleReviewIfEligible() {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+        guard reviewPrompt.isEligible(version: version) else { return }
+        let completedGame = gameID
+        // Allow the final move/result to settle; never interrupt a new game or a modal.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self, self.gameID == completedGame, self.status != .playing,
+                  self.presentedViewController == nil,
+                  let scene = self.viewIfLoaded?.window?.windowScene,
+                  scene.activationState == .foregroundActive,
+                  self.reviewPrompt.isEligible(version: version) else { return }
+            self.reviewPrompt.recordRequest(version: version)
+            if #available(iOS 18.0, *) {
+                AppStore.requestReview(in: scene)
+            } else {
+                SKStoreReviewController.requestReview(in: scene)
+            }
+        }
+    }
+
     private func resetBoard() {
+        gameID = UUID()
         aiGeneration += 1 // discard any in-flight AI search
         board = Engine.initialBoard()
         turn = .white

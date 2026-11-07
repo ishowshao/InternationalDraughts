@@ -1,6 +1,12 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Rate this app" : {
+      "localizations" : {
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "给我们评分" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "給我們評分" } }
+      }
+    },
   "Your color (changing starts a new game)": {
     "localizations": {
       "zh-Hans": {

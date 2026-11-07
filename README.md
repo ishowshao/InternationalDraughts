@@ -11,6 +11,7 @@ An iOS implementation of International Draughts (10x10), written with UIKit and 
 - Nearby two-player mode using local peer discovery, without an internet connection.
 - Rotated board for the Black player in nearby matches.
 - Adaptive layouts for narrow windows, wide screens, and iPhone Duo folds; the board stays square and controls remain scrollable.
+- App Store review link and occasional native rating requests after three completed games, regardless of outcome; at most once per version and at least 120 days apart. Counters stay on-device.
 - UI tests for core gameplay, layout, and nearby-match automation hooks.
 
 ## Requirements
@@ -98,6 +99,7 @@ The app uses `NSLocalNetworkUsageDescription` and Bonjour service declarations i
 - 附近双人对战，通过本地设备发现建立连接，无需互联网。
 - 附近对战中，执黑玩家看到旋转后的棋盘。
 - 支持窄窗口、宽屏和 iPhone Duo 折叠布局；棋盘保持正方形，操作面板可滚动。
+- 提供 App Store 评分入口；完成三局后适时请求系统评分，不区分输赢，同一版本最多一次，至少间隔 120 天。计数仅保存在本机。
 - 包含核心对局、布局和附近对战自动化钩子的 UI 测试。
 
 ## 运行要求
