@@ -189,3 +189,20 @@ Both `zh-Hans` and `en-US` use native simulator screenshots showing Master selec
 - Screenshots: two native screenshots per device group (iPhone, iPad, Duo cover) and localization (`zh-Hans`, `en-US`), 12 total; all processed successfully.
 - Validation: 13 Release unit tests passed; the bilingual Master selection/AI-reply UI test passed on iPhone 17 Pro Max, iPad Pro 13-inch (M5), and iPhone Duo. Signed archive and bundled model verified; upload succeeded.
 - Updated the new social-media age-rating fields to false to match the app's functionality.
+
+
+## Submission Record — 1.6 (8)
+
+- Submitted: 2026-11-07T14:11:06.268Z
+- App Store version ID: `7405e05f-8670-4c28-a138-de1057f2d12e`
+- Build ID: `7d64c9d2-611d-4763-b415-a7439fba4823`
+- Review submission ID: `b0993997-ebae-4cb6-bf76-09903e43ae86`
+- Build processing state: `VALID`
+- Version and review submission state: `WAITING_FOR_REVIEW`
+- Release type: `AFTER_APPROVAL`
+- Feature commit: `b277f99`; release branch: `release/1.6`; tag: `ios/v1.6-b8`.
+- Based on the published 1.5 source (`3326738`), excluding subsequent local AI experiments and training work. AI source and bundled model match 1.5.
+- Adds the localized review link and native StoreKit requests after three completed games, independent of outcome; at most once per version, with a 120-day cooldown. Pending requests are skipped after a restart, while inactive, or while another modal is presented.
+- Validation: 18 Release simulator tests passed (15 unit tests and 3 UI tests), including persisted prompt counters/cooldown, Simplified Chinese/Traditional Chinese/English entry visibility, gameplay and landscape regression. Localized screenshots visually inspected. Signed archive verified and upload succeeded.
+- StoreKit decides whether a production request displays a prompt; tests do not assert that a user submitted a rating.
+- Existing 12 App Store screenshots inherited and confirmed ACTIVE across both localizations and all three device groups.
